@@ -5,19 +5,19 @@ mod para Minecraft Fabric 1.21.10 que añade algunas cosas QOL, mayormente relac
 ## instalación
 
 ### para gente normal:
-1. ir a [lanzamientos](https://github.com/retuci0/camera-tweaks/releases)
+1. ir a [lanzamientos](https://github.com/retuci0/sputnik/releases)
 2. selecionar la versión más reciente
 3. descargar el .jar
 4. moverlo a tu directorio de mods (probablemente `%appdata%/.minecraft/mods`)
 
-asegúrate de tener una version de Minecraft y Fabric compatibles con el mod (MC `1.21.10`; Fabric `0.138.3`)
+asegúrate de tener una version de Minecraft y Fabric compatibles con el mod (MC `1.21.11`; Fabric `0.17.3`)
 es posible que haya problemas al usarlo junto a otros mods, especialmente junto a otros clientes, pues pueden conflictar entre ellos.
 
 ### para frikis de 200 de iq
-1. clona el respositorio (`git clone https://github.com/retuci0/camera-tweaks`)
-2. entra al directorio del repositorio (`cd camera-tweaks`)
+1. clona el respositorio (`git clone https://github.com/retuci0/sputnik`)
+2. entra al directorio del repositorio (`cd sputnik`)
 3. `gradlew build` para Windows o `chmod +x gradlew` + `./gradlew build` para Linux (Mac es Linux)
-4. el resultado estará en `/build/libs/camtweaks-X.X.jar` (el que no lleva "sources" en el nombre)
+4. el resultado estará en `/build/libs/sputnik-X.X.jar` (el que no lleva "sources" en el nombre)
 
 ## uso
 

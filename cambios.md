@@ -1,25 +1,17 @@
-# v2.2
+# v2.3
 
 ## novedades
 
-- elementos del hud con imágenes
+- renombrado el mod a sputnik porque esmegma o cameratweaks era un asco y sputnik ta to wapo
 
 ### adiciones
 
-- elementos del hud de dinosaurios (autismaxxing), echest (items del echest) y totems (totems restantes en el inventario)
-
 #### módulos nuevos:
-
-- conejo: haz el elytra-bounce más fácilmente
 
 ### arreglos / mejoras
 
-- ya no te puedes mover con una interfaz abierta en modo cámara libre
-- minar sin interrupción ya va
-- destello de enchants ya funciona
-- ahora no siempre se verá a traves de paredes al renderizar (ej.: superposición de luz)
-- el renderizado de líneas ya se adapta bien a la posición de la cámara
-- la superposición de daño ya funciona
+- ahora tienes un múltiplo en críticos, es decir, un número por el que se multiplica la cantidad de partículas a generar
+- ya no se guardan los ajustes mientras se cargan
 
 ## problemas reconocidos
 

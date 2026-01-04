@@ -1,0 +1,22 @@
+package me.retucio.sputnik.module.modules.player;
+
+import me.retucio.sputnik.module.Category;
+import me.retucio.sputnik.module.Module;
+import me.retucio.sputnik.module.settings.NumberSetting;
+
+public class Headhitters extends Module {
+
+    public NumberSetting delay = addSetting(new NumberSetting("delay", "delay de saltos", 0, 0, 20, 1));
+
+    public Headhitters() {
+        super("headhitters",
+                "mantén pulsado el espacio para hacer headhitting sin tener que espamearlo",
+                Category.PLAYER);
+    }
+
+    @Override
+    public void onTick() {
+        if (mc.player == null) return;
+        mc.player.jumpingCooldown = delay.getIntValue();
+    }
+}

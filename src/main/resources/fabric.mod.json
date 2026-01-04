@@ -1,29 +1,29 @@
 {
 	"schemaVersion": 1,
-	"id": "camtweaks",
+	"id": "sputnik",
 	"version": "${version}",
 	"name": "mod de putas de retucio",
-	"description": "cositas chulas pa la cámara",
+	"description": "cositas chulas pal jueguito de los cuadrados",
 	"authors": [
 		"el prepu"
 	],
 	"contact": {
 		"homepage": "https://github.com/retuci0",
-		"sources": "https://github.com/retuci0/camera-tweaks"
+		"sources": "https://github.com/retuci0/sputnik"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/camtweaks/icon.png",
+	"icon": "assets/sputnik/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 		], "client": [
-			"me.retucio.camtweaks.CameraTweaks"
+			"me.retucio.sputnik.Sputnik"
 		]
 	},
 	"mixins": [
-		"camtweaks.mixins.json"
+		"sputnik.mixins.json"
 	],
-	"accessWidener": "camtweaks.accesswidener",
+	"accessWidener": "sputnik.accesswidener",
 	"depends": {
 		"fabricloader": ">=0.17.3",
 		"minecraft": "~1.21.10",

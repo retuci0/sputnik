@@ -29,7 +29,7 @@ dependencies {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/camtweaks.accesswidener")
+	accessWidenerPath = file("src/main/resources/sputnik.accesswidener")
 }
 
 processResources {

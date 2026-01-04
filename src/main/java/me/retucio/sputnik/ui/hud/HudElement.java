@@ -1,0 +1,47 @@
+package me.retucio.sputnik.ui.hud;
+
+import me.retucio.sputnik.module.modules.client.HUD;
+import me.retucio.sputnik.ui.widgets.Widget;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.Text;
+
+import java.util.List;
+
+public abstract class HudElement extends Widget {
+
+    private final String id;
+    protected boolean visible;
+    protected final int defaultX, defaultY;
+
+    public HudElement(String id, int defaultX, int defaultY) {
+        super(defaultX, defaultY, 85, 14);
+        this.id = id;
+        this.defaultX = defaultX;
+        this.defaultY = defaultY;
+        this.visible = true;
+    }
+
+    public abstract void renderInGame(DrawContext ctx, float delta, HUD hud);
+    public abstract void renderInEditor(DrawContext ctx, HUD hud);
+    public abstract List<Text> getTooltip();
+
+    public boolean isHovered(int mouseX, int mouseY) {
+        return mouseX >= x && mouseX <= x + w
+                && mouseY >= y && mouseY <= y + w;
+    }
+
+    public String getId() { return id; }
+
+    public boolean isVisible() { return visible; }
+    public void setVisible(boolean visible) { this.visible = visible; }
+
+    public void resetPosition() {
+        this.x = defaultX;
+        this.y = defaultY;
+    }
+
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
