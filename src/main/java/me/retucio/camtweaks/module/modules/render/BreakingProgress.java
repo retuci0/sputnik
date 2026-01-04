@@ -68,8 +68,8 @@ public class BreakingProgress extends Module {
                 centerX + shrunkX, centerY + shrunkZ, centerZ + shrunkZ
         );
 
-        if (outlines.isEnabled()) RenderUtil.drawOutlineBox(event.getMatrices(), scaledBox, outlineColor.getColor(), lineWidth.getFloatValue());
-        if (fillings.isEnabled()) RenderUtil.drawFilledBox(event.getMatrices(), scaledBox, fillingColor.getColor());
+        if (outlines.isEnabled()) RenderUtil.drawOutlineBox(event.getMatrices(), scaledBox, outlineColor.getColor(), lineWidth.getFloatValue(), false);
+        if (fillings.isEnabled()) RenderUtil.drawFilledBox(event.getMatrices(), scaledBox, fillingColor.getColor(), false);
     }
 
     public enum BreakMode {

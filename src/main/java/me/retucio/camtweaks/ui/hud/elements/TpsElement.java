@@ -2,12 +2,13 @@ package me.retucio.camtweaks.ui.hud.elements;
 
 import me.retucio.camtweaks.module.modules.client.HUD;
 import me.retucio.camtweaks.ui.hud.HudElement;
+import me.retucio.camtweaks.ui.hud.TextHudElement;
 import me.retucio.camtweaks.util.NetworkUtil;
 import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class TpsElement extends HudElement {
+public class TpsElement extends TextHudElement {
 
     public TpsElement() {
         super("tps", 2, mc.textRenderer.fontHeight + 4);

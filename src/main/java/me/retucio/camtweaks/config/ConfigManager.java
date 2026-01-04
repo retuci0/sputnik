@@ -122,6 +122,17 @@ public class ConfigManager {
         save();
     }
 
+    public static void setHudImagePath(String id, String imagePath) {
+        ensureConfig();
+        config.hudImagePaths.put(id, imagePath);
+        save();
+    }
+
+    public static String getHudImagePath(String id) {
+        ensureConfig();
+        return config.hudImagePaths.getOrDefault(id, "");
+    }
+
     public static void setSearchBarPosition(int x, int y) {
         ensureConfig();
         config.searchBarPosition = new int[] {x, y};

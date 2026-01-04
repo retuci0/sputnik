@@ -6,7 +6,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public abstract class Widget {
 
-    protected final MinecraftClient mc = MinecraftClient.getInstance();
+    protected static final MinecraftClient mc = MinecraftClient.getInstance();
 
     protected int x, y, w, h;
 
@@ -18,7 +18,7 @@ public abstract class Widget {
     }
 
 
-    public abstract void render(DrawContext ctx, int mouseX, int mouseY, float delta);
+    public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {}
 
 
     // input

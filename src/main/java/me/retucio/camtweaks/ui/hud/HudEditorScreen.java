@@ -112,8 +112,8 @@ public class HudEditorScreen extends Screen {
         int newX = mouseX - dragOffsetX;
         int newY = mouseY - dragOffsetY;
 
-        newX = Math.max(1, Math.min(newX, width - selected.getWidth() - 1));
-        newY = Math.max(1, Math.min(newY, height - selected.getHeight() - 1));
+        newX = Math.max(1, Math.min(newX, width - selected.getW() - 1));
+        newY = Math.max(1, Math.min(newY, height - selected.getH() - 1));
 
         selected.setPosition(newX, newY);
         return true;

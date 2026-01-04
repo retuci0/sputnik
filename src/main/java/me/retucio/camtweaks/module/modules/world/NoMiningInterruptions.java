@@ -4,6 +4,7 @@ import me.retucio.camtweaks.module.Category;
 import me.retucio.camtweaks.module.Module;
 import me.retucio.camtweaks.module.settings.BooleanSetting;
 import me.retucio.camtweaks.module.settings.ListSetting;
+import me.retucio.camtweaks.util.ChatUtil;
 import me.retucio.camtweaks.util.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,14 +23,13 @@ public class NoMiningInterruptions extends Module {
     }
 
     public boolean shouldIgnoreEntity(Entity entity) {
-        if (entity == null || !this.isEnabled() || mc.player == null) return false;
+        if (entity == null || !isEnabled() || mc.player == null) return false;
 
+        boolean pickaxe = true;
         if (withPickaxeOnly.isEnabled())
-            return (mc.player.getMainHandStack().isIn(ItemTags.PICKAXES)
+            pickaxe = (mc.player.getMainHandStack().isIn(ItemTags.PICKAXES)
                     || mc.player.getOffHandStack().isIn(ItemTags.PICKAXES));
 
-        return entities.isEnabled(entity.getType());
+        return entities.isEnabled(entity.getType()) && pickaxe;
     }
-
-
 }

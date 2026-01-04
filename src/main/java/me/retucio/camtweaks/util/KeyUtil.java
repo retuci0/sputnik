@@ -2,21 +2,24 @@ package me.retucio.camtweaks.util;
 
 import me.retucio.camtweaks.CameraTweaks;
 import me.retucio.camtweaks.mixin.accessor.KeyBindingAccessor;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.option.KeyBinding;
 import org.lwjgl.glfw.GLFW;
+
+import static me.retucio.camtweaks.CameraTweaks.mc;
 
 // cosas útiles relacionadas a las teclas
 public class KeyUtil {
 
     public static boolean isKeyDown(int key) {
         return GLFW.glfwGetKey(
-                CameraTweaks.mc.getWindow().getHandle(),
+                mc.getWindow().getHandle(),
                 key) != GLFW.GLFW_RELEASE;
     }
 
     public static boolean isKeyDown(KeyBinding key) {
         return GLFW.glfwGetKey(
-                CameraTweaks.mc.getWindow().getHandle(),
+                mc.getWindow().getHandle(),
                 ((KeyBindingAccessor) key).getBoundKey().getCode()
         ) != GLFW.GLFW_RELEASE;
     }
@@ -24,6 +27,17 @@ public class KeyUtil {
     public static boolean isShiftDown() {
         return isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)
                 || isKeyDown(GLFW.GLFW_KEY_RIGHT_SHIFT);
+    }
+
+    public static void pressKey(int key, int action) {
+        pressKey(key, action, 0, 0);
+    }
+
+    public static void pressKey(int key, int action, int scancode, int modifiers) {
+        mc.keyboard.onKey(
+                mc.getWindow().getHandle(),
+                action,
+                new KeyInput(key, scancode, modifiers));
     }
 
     public static String getKeyName(int key) {

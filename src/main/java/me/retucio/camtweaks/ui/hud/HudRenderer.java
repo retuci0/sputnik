@@ -37,6 +37,10 @@ public class HudRenderer {
         addElement(new TimeElement(), positions, visibilities);
         addElement(new PingElement(), positions, visibilities);
 
+        addElement(new DynoElement(), positions, visibilities);
+        addElement(new EchestElement(), positions, visibilities);
+        addElement(new TotemsElement(), positions, visibilities);
+
         HudEditorScreen.INSTANCE.setElements(elements);
     }
 
@@ -58,6 +62,16 @@ public class HudRenderer {
 
         elements.add(element);
     }
+
+    public static HudElement getElement(Class<? extends HudElement> clazz) {
+        for (HudElement element : elements) {
+            if (element.getClass() == clazz)
+                return element;
+        }
+
+        return null;
+    }
+
 
     public static Color getColor(HUD hud) {
         return hud.color.getColor();

@@ -2,12 +2,13 @@ package me.retucio.camtweaks.ui.hud.elements;
 
 import me.retucio.camtweaks.module.modules.client.HUD;
 import me.retucio.camtweaks.ui.hud.HudElement;
+import me.retucio.camtweaks.ui.hud.TextHudElement;
 import me.retucio.camtweaks.util.MiscUtil;
 import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class TimeElement extends HudElement {
+public class TimeElement extends TextHudElement {
 
     public TimeElement() {
         super("time", mc.getWindow().getScaledWidth() - 50, mc.getWindow().getScaledHeight() - mc.textRenderer.fontHeight - 2);

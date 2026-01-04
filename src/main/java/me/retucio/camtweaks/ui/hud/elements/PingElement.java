@@ -2,12 +2,13 @@ package me.retucio.camtweaks.ui.hud.elements;
 
 import me.retucio.camtweaks.module.modules.client.HUD;
 import me.retucio.camtweaks.ui.hud.HudElement;
+import me.retucio.camtweaks.ui.hud.TextHudElement;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class PingElement extends HudElement {
+public class PingElement extends TextHudElement {
 
     public PingElement() {
         super("ping", 2, 2 * (mc.textRenderer.fontHeight + 4));

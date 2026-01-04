@@ -2,11 +2,13 @@ package me.retucio.camtweaks.ui.hud.elements;
 
 import me.retucio.camtweaks.module.modules.client.HUD;
 import me.retucio.camtweaks.ui.hud.HudElement;
+import me.retucio.camtweaks.ui.hud.TextHudElement;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class FpsElement extends HudElement {
+public class FpsElement extends TextHudElement {
 
     public FpsElement() {
         super("fps", 2, 2);
@@ -28,5 +30,10 @@ public class FpsElement extends HudElement {
                 Text.literal("FPS"),
                 Text.literal("te muestra los fotogramas por segundo a los que corre el juego")
         );
+    }
+
+    @Override
+    public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
+        
     }
 }

@@ -1,8 +1,10 @@
 package me.retucio.camtweaks.module.modules.render;
 
+import me.retucio.camtweaks.mixin.accessor.OverlayTextureAccessor;
 import me.retucio.camtweaks.module.Category;
 import me.retucio.camtweaks.module.Module;
 import me.retucio.camtweaks.module.settings.ColorSetting;
+
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 
@@ -70,12 +72,11 @@ public class DamageOverlay extends Module {
 
     // resubir las texturas
     private void uploadTexture() {
-//        GpuTextureView overlayTex = RenderSystem.getDevice().getShaderTexture(33985);
-//        RenderSystem.setShaderTexture(33985, overlayTex);
-//
-//        texture.upload();
-//
-//        GpuTextureView mainTex = RenderSystem.getShaderTexture(33984);
-//        RenderSystem.setShaderTexture(33984, mainTex);
+        if (mc.gameRenderer == null) return;
+
+        ((OverlayTextureAccessor) mc.gameRenderer.getOverlayTexture())
+                .setTexture(this.texture);
+
+        texture.upload();
     }
 }

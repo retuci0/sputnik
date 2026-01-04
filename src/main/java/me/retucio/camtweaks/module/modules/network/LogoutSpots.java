@@ -17,7 +17,9 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.awt.*;
@@ -243,18 +245,19 @@ public class LogoutSpots extends Module {
         public void renderBox(MatrixStack matrices) {
             if (fullHeight.isEnabled()) {
                 if (outlines.isEnabled())
-                    RenderUtil.drawOutlineBox(matrices, new Box(x, y, z, x + xWidth, y + height, z + zWidth), outlineColor.getColor(), lineWidth.getFloatValue());
+                    RenderUtil.drawOutlineBox(matrices, new Box(x, y, z, x + xWidth, y + height, z + zWidth), outlineColor.getColor(), lineWidth.getFloatValue(), true);
                 if (filling.isEnabled())
-                    RenderUtil.drawFilledBox(matrices, new Box(x, y, z, x + xWidth, y + height, z + zWidth), fillingColor.getColor());
+                    RenderUtil.drawFilledBox(matrices, new Box(x, y, z, x + xWidth, y + height, z + zWidth), fillingColor.getColor(), true);
             } else {
                 if (outlines.isEnabled()) {
-                    Box bottomBox = new Box(x, y, z, x + xWidth, y + 0.01, z + zWidth);
-                    RenderUtil.drawOutlineBox(matrices, bottomBox, outlineColor.getColor(), lineWidth.getFloatValue());
+                    RenderUtil.drawBlockFaceOutlines(matrices,
+                            BlockPos.ofFloored(x + halfWidth, y, z + halfWidth),
+                            Direction.UP, outlineColor.getColor(), lineWidth.getFloatValue(), true);
                 }
                 if (filling.isEnabled()) {
                     RenderUtil.drawBlockFaceFilled(matrices,
-                            net.minecraft.util.math.BlockPos.ofFloored(x + halfWidth, y, z + halfWidth),
-                            net.minecraft.util.math.Direction.UP, fillingColor.getColor(), 0.001f);
+                            BlockPos.ofFloored(x + halfWidth, y, z + halfWidth),
+                            Direction.UP, fillingColor.getColor(), 0.001f, true);
                 }
             }
         }

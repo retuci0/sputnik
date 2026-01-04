@@ -43,6 +43,7 @@ public class ModuleManager {
         modules.add(new ColoredSigns());
         modules.add(new CritsPlus());
         modules.add(new DamageOverlay());
+        modules.add(new ElytraBounce());
         modules.add(new FakePlayer());
         modules.add(new FastUse());
         modules.add(new Freecam());

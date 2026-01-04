@@ -32,6 +32,9 @@ public class ClientConfig {
     // id del elemento del hud -> true: visible / false: no visible
     public Map<String, Boolean> hudVisibilities = new HashMap<>();
 
+    // id del elemento del hud -> ruta de la imagen (NEW)
+    public Map<String, String> hudImagePaths = new HashMap<>();
+
     // posición de la barra de búsqueda (x, y)
     public int[] searchBarPosition = new int[]{340, 16};
 

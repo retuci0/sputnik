@@ -212,6 +212,8 @@ public class Freecam extends Module {
     @SubscribeEvent
     public void onKey(KeyEvent event) {
         if (KeyUtil.isKeyDown(GLFW.GLFW_KEY_F3)) return;
+        if (mc.currentScreen != null) return;
+
         KeyInput key = new KeyInput(event.getKey(), event.getScancode(), 0);
 
         boolean shouldCancel = true;
@@ -242,6 +244,9 @@ public class Freecam extends Module {
 
     @SubscribeEvent
     public void onMouseClick(MouseClickEvent event) {  // por si el restrasado del usuario usa el ratón para moverse
+        if (KeyUtil.isKeyDown(GLFW.GLFW_KEY_F3)) return;
+        if (mc.currentScreen != null) return;
+
         Click click = new Click(0, 0, new MouseInput(event.getButton(), 0));
 
         boolean shouldCancel = true;

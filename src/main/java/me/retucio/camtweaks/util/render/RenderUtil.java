@@ -1,13 +1,11 @@
 package me.retucio.camtweaks.util.render;
 
 import com.mojang.blaze3d.vertex.VertexFormat;
-import me.retucio.camtweaks.util.ChatUtil;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
-import net.minecraft.client.render.state.OutlineRenderState;
+import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Colors;
 import net.minecraft.util.math.*;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -82,7 +80,7 @@ public class RenderUtil {
         buffer.vertex(matrices.peek().getPositionMatrix(), x + width, y, 0).color(r, g, b, a);
         buffer.vertex(matrices.peek().getPositionMatrix(), x, y, 0).color(r, g, b, a);
 
-        Layers.getGlobalQuads().draw(buffer.end());
+        Layers.quads().draw(buffer.end());
         matrices.pop();
     }
 
@@ -93,8 +91,116 @@ public class RenderUtil {
         drawVerticalLine(stack, x1, y1, y2, color, width);
     }
 
+    public static void drawBlockFaceOutlines(MatrixStack matrices, BlockPos pos, Direction face, Color color, float lineWidth, boolean cull) {
+        Vec3d cameraPos = mc.gameRenderer.getCamera().getCameraPos();
+
+        float minX = (float) (pos.getX() - cameraPos.x);
+        float minY = (float) (pos.getY() - cameraPos.y);
+        float minZ = (float) (pos.getZ() - cameraPos.z);
+        float maxX = minX + 1;
+        float maxY = minY + 1;
+        float maxZ = minZ + 1;
+
+        BufferBuilder buffer = tesselator.begin(VertexFormat.DrawMode.LINES, VertexFormats.POSITION_COLOR_NORMAL_LINE_WIDTH);
+
+        switch (face) {
+            case UP:
+                buffer.vertex(matrices.peek(), minX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), minX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                break;
+
+            case DOWN:
+                buffer.vertex(matrices.peek(), minX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), minX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                break;
+
+            case EAST:
+                buffer.vertex(matrices.peek(), maxX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                break;
+
+            case WEST:
+                buffer.vertex(matrices.peek(), minX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), minX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), minX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), minX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                break;
+
+            case NORTH:
+                buffer.vertex(matrices.peek(), minX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), minX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                break;
+
+            case SOUTH:
+                buffer.vertex(matrices.peek(), minX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), maxX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), maxX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                buffer.vertex(matrices.peek(), minX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+                buffer.vertex(matrices.peek(), minX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+                break;
+        }
+
+        if (cull) Layers.linesCull().draw(buffer.end());
+        else Layers.lines().draw(buffer.end());
+    }
+
     // expand es para evitar z-fighting
-    public static void drawBlockFaceFilled(MatrixStack matrices, BlockPos pos, Direction face, Color color, float expand) {
+    public static void drawBlockFaceFilled(MatrixStack matrices, BlockPos pos, Direction face, Color color, float expand, boolean cull) {
         Vec3d cameraPos = mc.gameRenderer.getCamera().getCameraPos();
 
         float minX = (float) (pos.getX() - cameraPos.x);
@@ -166,34 +272,71 @@ public class RenderUtil {
                 break;
         }
 
-        Layers.getGlobalQuads().draw(buffer.end());
+        if (cull) Layers.quadsCull().draw(buffer.end());
+        else Layers.quads().draw(buffer.end());
     }
 
 
     // cajas
 
-    public static void drawOutlineBox(MatrixStack matrices, Box box, Color color, float lineWidth) {
-        Camera camera = mc.gameRenderer.getCamera();
-        Vec3d cameraPos = camera.getCameraPos();
+    public static void drawOutlineBox(MatrixStack matrices, Box box, Color color, float lineWidth, boolean cull) {
+        Vec3d cameraPos = mc.gameRenderer.getCamera().getCameraPos();
 
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(1 / camera.getPitch()));
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(1 / (camera.getYaw() + 180f)));
+        float minX = (float) (box.minX - cameraPos.x);
+        float minY = (float) (box.minY - cameraPos.y);
+        float minZ = (float) (box.minZ - cameraPos.z);
+        float maxX = (float) (box.maxX - cameraPos.x);
+        float maxY = (float) (box.maxY - cameraPos.y);
+        float maxZ = (float) (box.maxZ - cameraPos.z);
 
-        VertexRendering.drawOutline(
-                matrices,
-                mc.getBufferBuilders()
-                        .getEntityVertexConsumers()
-                        .getBuffer(RenderLayers.lines()),
-                VoxelShapes.cuboid(box),
-                -cameraPos.x,
-                -cameraPos.y,
-                -cameraPos.z,
-                color.getRGB(),
-                lineWidth);
+        BufferBuilder buffer = tesselator.begin(VertexFormat.DrawMode.LINES, VertexFormats.POSITION_COLOR_NORMAL_LINE_WIDTH);
+
+        // parte inferior
+        buffer.vertex(matrices.peek(), minX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), maxX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        buffer.vertex(matrices.peek(), maxX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), maxX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        buffer.vertex(matrices.peek(), maxX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), minX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        buffer.vertex(matrices.peek(), minX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), minX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        // parte superior
+        buffer.vertex(matrices.peek(), minX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), maxX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        buffer.vertex(matrices.peek(), maxX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), maxX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        buffer.vertex(matrices.peek(), maxX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), minX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        buffer.vertex(matrices.peek(), minX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), minX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        // líneas verticales
+        buffer.vertex(matrices.peek(), minX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), minX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        buffer.vertex(matrices.peek(), maxX, minY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), maxX, maxY, minZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        buffer.vertex(matrices.peek(), maxX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), maxX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        buffer.vertex(matrices.peek(), minX, minY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+        buffer.vertex(matrices.peek(), minX, maxY, maxZ).color(color.getRGB()).normal(-1, -1, -1).lineWidth(lineWidth);
+
+        if (cull) Layers.linesCull().draw(buffer.end());
+        else Layers.lines().draw(buffer.end());
     }
 
-    public static void drawFilledBox(MatrixStack matrices, Box box, Color color) {
+    public static void drawFilledBox(MatrixStack matrices, Box box, Color color, boolean cull) {
         Vec3d cameraPos = mc.gameRenderer.getCamera().getCameraPos();
+
         float minX = (float) (box.minX - cameraPos.x);
         float minY = (float) (box.minY - cameraPos.y);
         float minZ = (float) (box.minZ - cameraPos.z);
@@ -233,26 +376,27 @@ public class RenderUtil {
         buffer.vertex(matrices.peek().getPositionMatrix(), minX, maxY, maxZ).color(color.getRGB());
         buffer.vertex(matrices.peek().getPositionMatrix(), minX, maxY, minZ).color(color.getRGB());
 
-        Layers.getGlobalQuads().draw(buffer.end());
+        if (cull) Layers.quadsCull().draw(buffer.end());
+        else Layers.quads().draw(buffer.end());
     }
 
 
     // formas custom
 
-    public static void drawVoxelShapeOutline(MatrixStack matrices, VoxelShape voxelShape, BlockPos pos, Color color, float lineWidth) {
+    public static void drawVoxelShapeOutline(MatrixStack matrices, VoxelShape voxelShape, BlockPos blockPos, Color color, float lineWidth, boolean cull) {
         if (voxelShape.isEmpty()) return;
 
         voxelShape.forEachBox((minX, minY, minZ, maxX, maxY, maxZ) -> {
             Box box = new Box(
-                    pos.getX() + minX, pos.getY() + minY, pos.getZ() + minZ,
-                    pos.getX() + maxX, pos.getY() + maxY, pos.getZ() + maxZ
+                    blockPos.getX() + minX, blockPos.getY() + minY, blockPos.getZ() + minZ,
+                    blockPos.getX() + maxX, blockPos.getY() + maxY, blockPos.getZ() + maxZ
             );
 
-            drawOutlineBox(matrices, box, color, lineWidth);
+            drawOutlineBox(matrices, box, color, lineWidth, cull);
         });
     }
 
-    public static void drawVoxelShapeFilled(MatrixStack matrices, VoxelShape voxelShape, BlockPos pos, Color color) {
+    public static void drawVoxelShapeFilled(MatrixStack matrices, VoxelShape voxelShape, BlockPos pos, Color color, boolean cull) {
         if (voxelShape.isEmpty()) return;
 
         voxelShape.forEachBox((minX, minY, minZ, maxX, maxY, maxZ) -> {
@@ -261,22 +405,43 @@ public class RenderUtil {
                     pos.getX() + maxX, pos.getY() + maxY, pos.getZ() + maxZ
             );
 
-            drawFilledBox(matrices, box, color);
+            drawFilledBox(matrices, box, color, cull);
         });
     }
 
 
     // bloques
 
-    public static void drawBlockOutline(MatrixStack matrices, BlockPos pos, Color color, float lineWidth) {
+    public static void drawBlockOutline(MatrixStack matrices, BlockPos pos, Color color, float lineWidth, boolean cull) {
         Box box = new Box(pos.getX(), pos.getY(), pos.getZ(),
                 pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
-        drawOutlineBox(matrices, box, color, lineWidth);
+        drawOutlineBox(matrices, box, color, lineWidth, cull);
     }
 
-    public static void drawBlockFilled(MatrixStack matrices, BlockPos pos, Color color) {
+    public static void drawBlockFilled(MatrixStack matrices, BlockPos pos, Color color, boolean cull) {
         Box box = new Box(pos.getX(), pos.getY(), pos.getZ(),
                 pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
-        drawFilledBox(matrices, box, color);
+        drawFilledBox(matrices, box, color, cull);
+    }
+
+
+
+
+    public static MatrixStack matrixFrom(Vec3d pos) {
+        MatrixStack matrices = new MatrixStack();
+
+        Camera camera = mc.gameRenderer.getCamera();
+        Vec3d camPos = camera.getCameraPos();
+
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getYaw()));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getPitch() + 180.0F));
+
+        matrices.translate(
+                pos.getX() - camPos.getX(),
+                pos.getY() - camPos.getY(),
+                pos.getZ() - camPos.getZ()
+        );
+
+        return matrices;
     }
 }

@@ -8,6 +8,9 @@ import me.retucio.camtweaks.module.settings.BooleanSetting;
 import me.retucio.camtweaks.module.settings.ColorSetting;
 import me.retucio.camtweaks.module.settings.NumberSetting;
 import me.retucio.camtweaks.util.render.RenderUtil;
+import net.minecraft.block.*;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.LightType;
@@ -52,8 +55,8 @@ public class LightOverlay extends Module {
         }
 
         for (BlockPos block : blocks) {
-            if (mc.world.getBlockState(block).isAir() || !mc.world.getBlockState(block.up()).isAir()) continue;
-            if (!mc.world.isTopSolid(block, mc.player) || !mc.world.getBlockState(block).isOpaque()) continue;
+            if (mc.world.getBlockState(block).isAir() || !canSpawnOn(block)) continue;
+            if (!mc.world.getBlockState(block).isOpaque()) continue;
             int light = mc.world.getLightLevel(LightType.BLOCK, block.up());
 
             Color color = light == 0 ? darknessColor.getColor()
@@ -63,7 +66,7 @@ public class LightOverlay extends Module {
                             (lightColor.getB() / 15) * light,
                             lightColor.getA());
 
-            RenderUtil.drawBlockFaceFilled(event.getMatrices(), block, Direction.UP, color, 0.001f);
+            RenderUtil.drawBlockFaceFilled(event.getMatrices(), block, Direction.UP, color, 0.001f, true);
         }
     }
 
@@ -85,14 +88,56 @@ public class LightOverlay extends Module {
             for (int z = minZ; z <= maxZ; z++) {
                 for (int y = minY; y <= maxY; y++) {
                     BlockPos current = new BlockPos(x, y, z);
-                    BlockPos above = current.up();
 
-                    if (!mc.world.isAir(current) && (mc.world.isAir(above) || (mc.world.isWater(above) && onWater.isEnabled())))
+                    if (!mc.world.isAir(current) && canSpawnOn(current))
                         results.add(current);
                 }
             }
         }
 
         return results;
+    }
+
+    private boolean canSpawnOn(BlockPos pos) {
+        BlockState aboveState = mc.world.getBlockState(pos.up());
+        Block aboveBlock = aboveState.getBlock();
+
+        if (aboveState.isAir()) return true;
+        if (aboveBlock == Blocks.WATER && onWater.isEnabled()) return true;
+
+        if (aboveBlock instanceof PlantBlock) return true;
+
+        if (!aboveState.isOpaque() && !aboveState.isFullCube(mc.world, pos.up())) {
+
+            if (aboveBlock instanceof SlabBlock
+                    || aboveBlock instanceof StairsBlock
+                    || aboveBlock instanceof ButtonBlock
+                    || aboveBlock instanceof CarpetBlock
+                    || aboveBlock instanceof PressurePlateBlock
+                    || aboveBlock instanceof PaneBlock
+                    || aboveBlock instanceof TrapdoorBlock
+                    || aboveBlock instanceof FenceBlock
+                    || aboveBlock instanceof WallBlock
+                    || aboveBlock instanceof AnvilBlock
+                    || aboveBlock instanceof BedBlock) {
+                return false;
+            }
+
+            if (aboveBlock == Blocks.CHEST ||
+                    aboveBlock == Blocks.ENDER_CHEST ||
+                    aboveBlock == Blocks.BARREL ||
+                    aboveBlock == Blocks.TRAPPED_CHEST) {
+                return false;
+            }
+
+            return aboveBlock != Blocks.ENCHANTING_TABLE
+                    && aboveBlock != Blocks.GRINDSTONE
+                    && aboveBlock != Blocks.STONECUTTER
+                    && aboveBlock != Blocks.LOOM
+                    && aboveBlock != Blocks.COMPOSTER
+                    && aboveBlock != Blocks.CAKE;
+        }
+
+        return true;
     }
 }

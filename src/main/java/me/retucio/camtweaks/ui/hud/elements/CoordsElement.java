@@ -1,14 +1,18 @@
-package me.retucio.camtweaks.ui.hud;
+package me.retucio.camtweaks.ui.hud.elements;
 
 import me.retucio.camtweaks.module.ModuleManager;
 import me.retucio.camtweaks.module.modules.camera.Freecam;
 import me.retucio.camtweaks.module.modules.client.HUD;
+import me.retucio.camtweaks.ui.hud.HudElement;
+import me.retucio.camtweaks.ui.hud.TextHudElement;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
-public class CoordsElement extends HudElement {
+public class CoordsElement extends TextHudElement {
 
     public CoordsElement() {
         super("coords", 2, mc.getWindow().getScaledHeight() - mc.textRenderer.fontHeight);

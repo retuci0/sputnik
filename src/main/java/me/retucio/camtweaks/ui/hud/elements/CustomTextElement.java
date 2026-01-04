@@ -5,11 +5,12 @@ import me.retucio.camtweaks.event.events.camtweaks.UpdateSettingEvent;
 import me.retucio.camtweaks.module.ModuleManager;
 import me.retucio.camtweaks.module.modules.client.HUD;
 import me.retucio.camtweaks.ui.hud.HudElement;
+import me.retucio.camtweaks.ui.hud.TextHudElement;
 import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class CustomTextElement extends HudElement {
+public class CustomTextElement extends TextHudElement {
 
     public CustomTextElement() {
         super("customText", mc.getWindow().getScaledWidth() / 2 - 40, 2);

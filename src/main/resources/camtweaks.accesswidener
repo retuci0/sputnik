@@ -1,5 +1,6 @@
 accessWidener   v2  named
 
+accessible field net/minecraft/client/texture/TextureManager textures Ljava/util/Map;
 
 accessible method net/minecraft/network/ClientConnection handleQueuedTasks ()V
 accessible method net/minecraft/network/ClientConnection sendImmediately (Lnet/minecraft/network/packet/Packet;Lio/netty/channel/ChannelFutureListener;Z)V
@@ -10,6 +11,9 @@ accessible class net/minecraft/client/network/ClientCommonNetworkHandler$Confirm
 accessible class net/minecraft/client/network/ClientCommonNetworkHandler$ConfirmServerResourcePackScreen$Pack
 
 accessible class net/minecraft/client/font/TextRenderer$Drawer
+
+accessible method net/minecraft/entity/Entity setFlag (IZ)V
+accessible method net/minecraft/entity/player/PlayerEntity canGlide ()Z
 
 accessible field net/minecraft/client/particle/BillboardParticle alpha F
 accessible field net/minecraft/client/particle/BillboardParticle scale F
@@ -23,3 +27,4 @@ accessible field net/minecraft/client/render/WorldRenderer worldRenderState Lnet
 accessible method net/minecraft/client/render/GameRenderer getProjectionMatrix (F)Lorg/joml/Matrix4f;
 
 accessible method net/minecraft/screen/ScreenHandlerType register (Ljava/lang/String;Lnet/minecraft/screen/ScreenHandlerType$Factory;)Lnet/minecraft/screen/ScreenHandlerType;
+accessible method net/minecraft/client/Keyboard onKey (JILnet/minecraft/client/input/KeyInput;)V

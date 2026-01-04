@@ -1,11 +1,13 @@
 package me.retucio.camtweaks.module.modules.client;
 
+import me.retucio.camtweaks.CameraTweaks;
 import me.retucio.camtweaks.module.Category;
 import me.retucio.camtweaks.module.Module;
 import me.retucio.camtweaks.module.settings.*;
 import me.retucio.camtweaks.ui.hud.HudElement;
 import me.retucio.camtweaks.ui.hud.HudRenderer;
 import me.retucio.camtweaks.ui.hud.HudEditorScreen;
+import me.retucio.camtweaks.ui.hud.elements.DynoElement;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
@@ -32,6 +34,8 @@ public class HUD extends Module {
     public EnumSetting<TimeFormat> timeFormat = addSetting(new EnumSetting<>("formato de la hora", "12h o 24h", TimeFormat.class, TimeFormat.TWENTY_FOUR_HOUR));
     public StringSetting customText = addSetting(new StringSetting("texto custom", "marca de agua (dejar vacío para quitar)", "adolf jitler inshtagram feishbuc twiter", 40));
     public EnumSetting<CoordsMode> coordsMode = addSetting(new EnumSetting<>("modo de coordenadas", "qué coordenadas mostrar", CoordsMode.class, CoordsMode.OVERWORLD));
+    public EnumSetting<Dynosaurs> dyno = addSetting(new EnumSetting<>("dinosaurio", "qué dinosaurio mostrar",
+            Dynosaurs.class, Dynosaurs.SPINOSAURUS));
 
     public HUD() {
         super("HUD",
@@ -39,6 +43,11 @@ public class HUD extends Module {
                 Category.CLIENT,
                 GLFW.GLFW_KEY_F12
         );
+
+        dyno.onUpdate(v -> {
+            DynoElement element = (DynoElement) HudRenderer.getElement(DynoElement.class);
+            if (element != null) element.reloadTexture();
+        });
     }
 
     public enum TimeFormat {
@@ -58,5 +67,19 @@ public class HUD extends Module {
         private final String name;
         CoordsMode(String name) { this.name = name; }
         @Override public String toString() { return name; }
+    }
+
+    public enum Dynosaurs {
+        ANKYLOSAURUS("anquilosaurio"),
+        PTERODACTYL("ptetodáctilo"),
+        SPINOSAURUS("espinosaurio"),
+        TREX("t-rex"),
+        TRICERATOPS("tricerátops"),
+        VELOCIRRAPTOR("velocirráptor");
+
+        private final String name;
+        Dynosaurs(String name) { this.name = name; }
+        @Override public String toString() { return name; }
+        public String toRealString() { return super.toString(); }
     }
 }

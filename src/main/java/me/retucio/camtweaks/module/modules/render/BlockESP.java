@@ -8,10 +8,13 @@ import me.retucio.camtweaks.module.settings.BooleanSetting;
 import me.retucio.camtweaks.module.settings.ColorSetting;
 import me.retucio.camtweaks.module.settings.ListSetting;
 import me.retucio.camtweaks.module.settings.NumberSetting;
+import me.retucio.camtweaks.util.ChatUtil;
 import me.retucio.camtweaks.util.Colors;
 import me.retucio.camtweaks.util.Lists;
 import me.retucio.camtweaks.util.render.RenderUtil;
 import net.minecraft.block.Block;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.shape.VoxelShape;
@@ -63,14 +66,16 @@ public class BlockESP extends Module {
                                 getVoxelShape(pos),
                                 pos,
                                 outlineColor.getColor(),
-                                lineWidth.getFloatValue());
+                                lineWidth.getFloatValue(),
+                                false);
                     }
                     if (fillings.isEnabled()) {
                         RenderUtil.drawVoxelShapeFilled(
                                 event.getMatrices(),
                                 getVoxelShape(pos),
                                 pos,
-                                fillingColor.getColor());
+                                fillingColor.getColor(),
+                                false);
                     }
                 }
             }

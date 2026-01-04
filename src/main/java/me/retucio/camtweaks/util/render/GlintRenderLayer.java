@@ -35,8 +35,8 @@ public class GlintRenderLayer extends RenderLayer {
         addGlintTypes(map, armorEntityGlintColor);
     }
 
-    public GlintRenderLayer(String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, Runnable startAction, Runnable endAction) {
-        super(name, RenderSetup.builder(RenderPipeline.builder().build()).build());
+    public GlintRenderLayer(String name) {
+        super(name, RenderSetup.builder(RenderPipelines.GLINT).build());
     }
 
     private static List<RenderLayer> newRenderList(Function<String, RenderLayer> func) {
@@ -60,17 +60,8 @@ public class GlintRenderLayer extends RenderLayer {
     private static RenderLayer buildGlintRenderLayer(String name) {
         final Identifier res = Identifier.of(CameraTweaks.MOD_ID, "textures/misc/glint_" + name.toLowerCase() + ".png");
 
-        return RenderLayer.of("glint_" + name, RenderSetup.builder(
-                        RenderPipeline.builder()
-                                .withCull(false)
-                                .withDepthTestFunction(DepthTestFunction.EQUAL_DEPTH_TEST)
-                                .withBlend(BlendFunction.GLINT)
-                                .withLocation(RenderPipelines.GLINT.getLocation())
-                                .withVertexShader(RenderPipelines.GLINT.getVertexShader())
-                                .withFragmentShader(RenderPipelines.GLINT.getFragmentShader())
-                                .withVertexFormat(RenderPipelines.GLINT.getVertexFormat(), RenderPipelines.GLINT.getVertexFormatMode())
-                                .build())
-                .texture("glint_" + name, res)
+        return RenderLayer.of("glint_" + name, RenderSetup.builder(RenderPipelines.GLINT)
+                .texture("Sampler0", res)
                 .textureTransform(TextureTransform.GLINT_TEXTURING)
                 .translucent()
                 .build());
@@ -80,17 +71,8 @@ public class GlintRenderLayer extends RenderLayer {
     private static RenderLayer buildEntityGlintRenderLayer(String name) {
         final Identifier res = Identifier.of(CameraTweaks.MOD_ID, "textures/misc/glint_" + name.toLowerCase() + ".png");
 
-        return RenderLayer.of("entity_glint_" + name, RenderSetup.builder(
-                        RenderPipeline.builder()
-                                .withCull(true)
-                                .withDepthTestFunction(DepthTestFunction.EQUAL_DEPTH_TEST)
-                                .withBlend(BlendFunction.GLINT)
-                                .withLocation(RenderPipelines.GLINT.getLocation())
-                                .withVertexShader(RenderPipelines.GLINT.getVertexShader())
-                                .withFragmentShader(RenderPipelines.GLINT.getFragmentShader())
-                                .withVertexFormat(VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS)
-                                .build())
-                .texture("entity_glint_" + name, res)
+        return RenderLayer.of("entity_glint_" + name, RenderSetup.builder(RenderPipelines.GLINT)
+                .texture("Sampler0", res)
                 .textureTransform(TextureTransform.ENTITY_GLINT_TEXTURING)
                 .outputTarget(OutputTarget.ITEM_ENTITY_TARGET)
                 .translucent()
@@ -101,16 +83,8 @@ public class GlintRenderLayer extends RenderLayer {
     private static RenderLayer buildArmorEntityGlintRenderLayer(String name) {
         final Identifier res = Identifier.of(CameraTweaks.MOD_ID, "textures/misc/glint_" + name.toLowerCase() + ".png");
 
-        return RenderLayer.of("armor_glint_" + name, RenderSetup.builder(
-                        RenderPipeline.builder()
-                                .withCull(false)
-                                .withDepthTestFunction(DepthTestFunction.EQUAL_DEPTH_TEST)
-                                .withLocation(RenderPipelines.GLINT.getLocation())
-                                .withVertexShader(RenderPipelines.GLINT.getVertexShader())
-                                .withFragmentShader(RenderPipelines.GLINT.getFragmentShader())
-                                .withVertexFormat(RenderPipelines.GLINT.getVertexFormat(), RenderPipelines.GLINT.getVertexFormatMode())
-                                .build())
-                .texture("armor_glint_" + name, res)
+        return RenderLayer.of("armor_glint_" + name, RenderSetup.builder(RenderPipelines.GLINT)
+                .texture("Sampler0", res)
                 .textureTransform(TextureTransform.ARMOR_ENTITY_GLINT_TEXTURING)
                 .layeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
                 .translucent()
