@@ -84,7 +84,7 @@ public abstract class GameRendererMixin {
             float lastYaw = cameraEntity.lastYaw;
             float lastPitch = cameraEntity.lastPitch;
 
-            ((IVec3d) cameraEntity.getEntityPos()).smegma$set(pos.x, pos.y - cameraEntity.getEyeHeight(cameraEntity.getPose()), pos.z);
+            ((IVec3d) cameraEntity.getEntityPos()).sputnik$set(pos.x, pos.y - cameraEntity.getEyeHeight(cameraEntity.getPose()), pos.z);
             cameraEntity.lastX = prevPos.x;
             cameraEntity.lastY = prevPos.y - cameraEntity.getEyeHeight(cameraEntity.getPose());
             cameraEntity.lastZ = prevPos.z;
@@ -97,7 +97,7 @@ public abstract class GameRendererMixin {
             updateCrosshairTarget(tickDelta);
             freecamDone = false;
 
-            ((IVec3d) cameraEntity.getEntityPos()).smegma$set(x, y, z);
+            ((IVec3d) cameraEntity.getEntityPos()).sputnik$set(x, y, z);
             cameraEntity.lastX = lastX;
             cameraEntity.lastY = lastY;
             cameraEntity.lastZ = lastZ;

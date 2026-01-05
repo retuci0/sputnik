@@ -20,20 +20,20 @@ public abstract class Vec3dMixin implements IVec3d {
     public double z;
 
     @Override
-    public void smegma$set(double x, double y, double z) {
+    public void sputnik$set(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
     @Override
-    public void smegma$setXZ(double x, double z) {
+    public void sputnik$setXZ(double x, double z) {
         this.x = x;
         this.z = z;
     }
 
     @Override
-    public void smegma$setY(double y) {
+    public void sputnik$setY(double y) {
         this.y = y;
     }
 }

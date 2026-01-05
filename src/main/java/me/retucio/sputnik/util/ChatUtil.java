@@ -1,5 +1,6 @@
 package me.retucio.sputnik.util;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.sputnik.LoadModuleManagerEvent;
 import me.retucio.sputnik.ui.widgets.frames.settings.ClientSettingsFrame;
@@ -24,7 +25,7 @@ public class ChatUtil {
     }
 
     public static void addMessage(Text text) {
-        if (mc.inGameHud == null || !me.retucio.sputnik.Sputnik.settingsApplied) return;
+        if (mc.inGameHud == null || !Sputnik.settingsApplied) return;
         mc.inGameHud.getChatHud().addMessage(text);
     }
 
@@ -87,6 +88,6 @@ public class ChatUtil {
     }
 
     public static String getDefaultPrefix() {
-        return Colors.getFormatting(Colors.mainColor) + "[smegma] ";
+        return Colors.getFormatting(Colors.mainColor) + "[sputnik] ";
     }
 }

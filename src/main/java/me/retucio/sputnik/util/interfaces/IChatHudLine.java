@@ -4,11 +4,11 @@ import com.mojang.authlib.GameProfile;
 
 public interface IChatHudLine {
 
-    String smegma$getText();
+    String sputnik$getText();
 
-    int smegma$getId();
-    void smegma$setId(int id);
+    int sputnik$getId();
+    void sputnik$setId(int id);
 
-    GameProfile smegma$getSender();
-    void smegma$setSender(GameProfile profile);
+    GameProfile sputnik$getSender();
+    void sputnik$setSender(GameProfile profile);
 }

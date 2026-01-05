@@ -22,17 +22,17 @@ public class ChatHudLineMixin implements IChatHudLine {
     private GameProfile sender;
 
     @Override
-    public String smegma$getText() { return content.toString(); }
+    public String sputnik$getText() { return content.toString(); }
 
     @Override
-    public int smegma$getId() { return id; }
+    public int sputnik$getId() { return id; }
 
     @Override
-    public void smegma$setId(int id) { this.id = id; }
+    public void sputnik$setId(int id) { this.id = id; }
 
     @Override
-    public GameProfile smegma$getSender() { return sender; }
+    public GameProfile sputnik$getSender() { return sender; }
 
     @Override
-    public void smegma$setSender(GameProfile profile) { this.sender = profile; }
+    public void sputnik$setSender(GameProfile profile) { this.sender = profile; }
 }

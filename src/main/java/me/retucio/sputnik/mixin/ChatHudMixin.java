@@ -62,7 +62,7 @@ public abstract class ChatHudMixin implements IChatHud {
     // métodos relacionados a las interfaces IChatHud, IChatHudLine, IChadHudLineVisible y IMessageHandler
 
     @Override
-    public void smegma$add(Text message, int id) {
+    public void sputnik$add(Text message, int id) {
         nextId = id;
         addMessage(message);
         nextId = 0;
@@ -70,12 +70,12 @@ public abstract class ChatHudMixin implements IChatHud {
 
     @Inject(method = "addVisibleMessage", at = @At(value = "INVOKE", target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V", shift = At.Shift.AFTER))
     private void onAddMessageAfterNewChatHudLineVisible(ChatHudLine message, CallbackInfo ci) {
-        ((IChatHudLine) (Object) visibleMessages.getFirst()).smegma$setId(nextId);
+        ((IChatHudLine) (Object) visibleMessages.getFirst()).sputnik$setId(nextId);
     }
 
     @Inject(method = "addMessage(Lnet/minecraft/client/gui/hud/ChatHudLine;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V", shift = At.Shift.AFTER))
     private void onAddMessageAfterNewChatHudLine(ChatHudLine message, CallbackInfo ci) {
-        ((IChatHudLine) (Object) messages.getFirst()).smegma$setId(nextId);
+        ((IChatHudLine) (Object) messages.getFirst()).sputnik$setId(nextId);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -86,8 +86,8 @@ public abstract class ChatHudMixin implements IChatHud {
 
         IChatHudLineVisible iLine = (IChatHudLineVisible) (Object) line;
 
-        iLine.smegma$setSender(handler.smegma$getSender());
-        iLine.smegma$setStartOfEntry(j == 0);
+        iLine.sputnik$setSender(handler.sputnik$getSender());
+        iLine.sputnik$setStartOfEntry(j == 0);
 
         return line;
     }
@@ -97,12 +97,12 @@ public abstract class ChatHudMixin implements IChatHud {
         IMessageHandler handler = (IMessageHandler) mc.getMessageHandler();
         if (handler == null) return line;
 
-        ((IChatHudLine) (Object) line).smegma$setSender(handler.smegma$getSender());
+        ((IChatHudLine) (Object) line).sputnik$setSender(handler.sputnik$getSender());
         return line;
     }
 
     @Override
-    public List<ChatHudLine.Visible> smegma$getVisibleMessages() {
+    public List<ChatHudLine.Visible> sputnik$getVisibleMessages() {
         return visibleMessages;
     }
 
@@ -118,10 +118,10 @@ public abstract class ChatHudMixin implements IChatHud {
         if (event.isCancelled()) {
             ci.cancel();
         } else {
-            visibleMessages.removeIf(msg -> ((IChatHudLine) (Object) msg).smegma$getId() == nextId && nextId != 0);
+            visibleMessages.removeIf(msg -> ((IChatHudLine) (Object) msg).sputnik$getId() == nextId && nextId != 0);
 
             for (int i = messages.size() - 1; i > -1; i--) {
-                if (((IChatHudLine) (Object) messages.get(i)).smegma$getId() == nextId && nextId != 0) {
+                if (((IChatHudLine) (Object) messages.get(i)).sputnik$getId() == nextId && nextId != 0) {
                     messages.remove(i);
                     chatPlus.removeLine(i);
                 }

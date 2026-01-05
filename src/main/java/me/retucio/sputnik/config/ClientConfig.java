@@ -5,6 +5,8 @@ import me.retucio.sputnik.event.events.sputnik.*;
 import me.retucio.sputnik.module.settings.*;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,7 +64,7 @@ public class ClientConfig {
             case StringSetting s: value = s.getValue(); break;
             case ListSetting l: value = l.getConfigValues(); break;
             case ColorSetting c: value = c.getConfigValue(); break;
-            case OptionSetting o: value = o.getIndex(); break;
+            case OptionSetting o: value = o.getDisplayName(); break;
             default: break;
         }
 
@@ -71,7 +73,6 @@ public class ClientConfig {
 
     @SubscribeEvent
     public void onOpenSettingsFrame(SettingsFrameEvent.Open event) {
-        if (settingsFrames.containsKey(event.getFrame().module.getName())) return;
         ConfigManager.setFramePosition(event.getFrame());
     }
 
@@ -119,5 +120,7 @@ public class ClientConfig {
                 ClickGUI.INSTANCE.getGuiSettingsFrame().extended));
     }
 
-    public record FrameData(int x, int y, boolean extended) {}
+    public record FrameData(int x, int y, boolean extended) implements Serializable {
+        @Serial private static final long serialVersionUID = 1L;
+    }
 }

@@ -1,5 +1,6 @@
 package me.retucio.sputnik.ui.widgets.frames;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.events.sputnik.ModuleFrameEvent;
 import me.retucio.sputnik.module.Module;
 import me.retucio.sputnik.module.ModuleManager;
@@ -101,7 +102,7 @@ public class ModuleFrame extends Frame<ModuleButton> {
                 dragY = mouseY - y;
             } else if (button == 1) {  // clic derecho para extenderlo
                 extended = !extended;
-                me.retucio.sputnik.Sputnik.EVENT_BUS.post(new ModuleFrameEvent.Extend());
+                Sputnik.EVENT_BUS.post(new ModuleFrameEvent.Extend());
             }
         }
 
@@ -132,7 +133,7 @@ public class ModuleFrame extends Frame<ModuleButton> {
         }
 
         if (isHovered(mouseX, mouseY))
-            me.retucio.sputnik.Sputnik.EVENT_BUS.post(new ModuleFrameEvent.Move());
+            Sputnik.EVENT_BUS.post(new ModuleFrameEvent.Move());
     }
 
     @Override

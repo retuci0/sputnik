@@ -4,6 +4,7 @@ import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.DepthTestFunction;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import me.retucio.sputnik.Sputnik;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
@@ -12,7 +13,7 @@ import net.minecraft.util.Identifier;
 public class Pipelines {
 
     static final RenderPipeline LINES_PIPELINE = RenderPipeline.builder(RenderPipelines.RENDERTYPE_LINES_SNIPPET)
-            .withLocation(Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, "pipeline/lines"))
+            .withLocation(Identifier.of(Sputnik.MOD_ID, "pipeline/lines"))
             .withVertexFormat(VertexFormats.POSITION_COLOR_NORMAL_LINE_WIDTH, VertexFormat.DrawMode.LINES)
             .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
             .withDepthWrite(false)
@@ -20,7 +21,7 @@ public class Pipelines {
             .build();
 
     static final RenderPipeline LINES_CULL_PIPELINE = RenderPipeline.builder(RenderPipelines.RENDERTYPE_LINES_SNIPPET)
-            .withLocation(Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, "pipeline/lines_cull"))
+            .withLocation(Identifier.of(Sputnik.MOD_ID, "pipeline/lines_cull"))
             .withVertexFormat(VertexFormats.POSITION_COLOR_NORMAL_LINE_WIDTH, VertexFormat.DrawMode.LINES)
             .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
             .withDepthWrite(false)
@@ -28,7 +29,7 @@ public class Pipelines {
             .build();
 
     static final RenderPipeline QUADS_PIPELINE = RenderPipeline.builder(RenderPipelines.POSITION_COLOR_SNIPPET)
-            .withLocation(Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, "pipeline/quads"))
+            .withLocation(Identifier.of(Sputnik.MOD_ID, "pipeline/quads"))
             .withVertexFormat(VertexFormats.POSITION_COLOR, VertexFormat.DrawMode.QUADS)
             .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
             .withBlend(BlendFunction.TRANSLUCENT)
@@ -37,7 +38,7 @@ public class Pipelines {
             .build();
 
     static final RenderPipeline QUADS_CULL_PIPELINE = RenderPipeline.builder(RenderPipelines.POSITION_COLOR_SNIPPET)
-            .withLocation(Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, "pipeline/quads_cull"))
+            .withLocation(Identifier.of(Sputnik.MOD_ID, "pipeline/quads_cull"))
             .withVertexFormat(VertexFormats.POSITION_COLOR, VertexFormat.DrawMode.QUADS)
             .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
             .withBlend(BlendFunction.TRANSLUCENT)

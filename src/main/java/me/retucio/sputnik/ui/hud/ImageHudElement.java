@@ -1,5 +1,6 @@
 package me.retucio.sputnik.ui.hud;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.module.modules.client.HUD;
 import me.retucio.sputnik.util.Colors;
 
@@ -22,7 +23,7 @@ public abstract class ImageHudElement extends HudElement {
 
     public ImageHudElement(String id, int defaultX, int defaultY) {
         super(id, defaultX, defaultY);
-        this.textureId = Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, "textures/" + id);
+        this.textureId = Identifier.of(Sputnik.MOD_ID, "textures/" + id);
         this.w = imageWidth;
         this.h = imageHeight;
     }
@@ -36,7 +37,7 @@ public abstract class ImageHudElement extends HudElement {
 
         try {
             // cargar
-            Identifier resourceId = Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, imagePath);
+            Identifier resourceId = Identifier.of(Sputnik.MOD_ID, imagePath);
             try (InputStream stream = mc.getResourceManager().getResource(resourceId).get().getInputStream()) {
                 NativeImage image = NativeImage.read(stream);
 
@@ -57,10 +58,10 @@ public abstract class ImageHudElement extends HudElement {
                 mc.getTextureManager().registerTexture(textureId, texture);
                 textureLoaded = true;
 
-                me.retucio.sputnik.Sputnik.LOGGER.info("textura para el elemento del HUD {} cargada", getId());
+                Sputnik.LOGGER.info("textura para el elemento del HUD {} cargada", getId());
             }
         } catch (Exception e) {
-            me.retucio.sputnik.Sputnik.LOGGER.error("no se pudo cargar la textura para el elemento del HUD {}: {}", getId(), e.getMessage());
+            Sputnik.LOGGER.error("no se pudo cargar la textura para el elemento del HUD {}: {}", getId(), e.getMessage());
         }
     }
 

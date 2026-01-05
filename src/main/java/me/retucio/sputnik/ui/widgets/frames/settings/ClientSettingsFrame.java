@@ -1,5 +1,6 @@
 package me.retucio.sputnik.ui.widgets.frames.settings;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.events.sputnik.GUISettingsFrameEvent;
 import me.retucio.sputnik.module.modules.client.GUI;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
@@ -65,7 +66,7 @@ public class ClientSettingsFrame extends SettingsFrame {
                 dragY = mouseY - y;
             } else if (button == 1) {
                 extended = !extended;
-                me.retucio.sputnik.Sputnik.EVENT_BUS.post(new GUISettingsFrameEvent.Extend());
+                Sputnik.EVENT_BUS.post(new GUISettingsFrameEvent.Extend());
             }
         }
 
@@ -78,7 +79,7 @@ public class ClientSettingsFrame extends SettingsFrame {
     public void mouseReleased(int mouseX, int mouseY, int button) {
         ClickGUI.INSTANCE.unselect(this);
         if (button == 0 && dragging)
-            me.retucio.sputnik.Sputnik.EVENT_BUS.post(new GUISettingsFrameEvent.Move());
+            Sputnik.EVENT_BUS.post(new GUISettingsFrameEvent.Move());
 
         super.mouseReleased(mouseX, mouseY, button);
     }

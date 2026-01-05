@@ -31,7 +31,7 @@ public class PurgeCommand extends Command {
         ChatHud chatHud = mc.inGameHud.getChatHud();
 
         synchronized (chatHud) {
-            List<ChatHudLine.Visible> visibleMessages = ((IChatHud) chatHud).smegma$getVisibleMessages();
+            List<ChatHudLine.Visible> visibleMessages = ((IChatHud) chatHud).sputnik$getVisibleMessages();
             int toRemove = Math.min(amount, visibleMessages.size());
             for (int i = 0; i < toRemove; i++)
                 visibleMessages.removeFirst();

@@ -1,5 +1,6 @@
 package me.retucio.sputnik.module;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.config.ConfigManager;
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.sputnik.ToggleModuleEvent;
@@ -78,24 +79,24 @@ public class Module {
         enabled = !enabled;
         if (enabled) onEnable();
         else onDisable();
-        me.retucio.sputnik.Sputnik.EVENT_BUS.post(new ToggleModuleEvent(this));
+        Sputnik.EVENT_BUS.post(new ToggleModuleEvent(this));
     }
 
     public void onEnable() {
         if (notify.isEnabled()) ChatUtil.info(getName() + " fue activado");
         for (Method method : getClass().getDeclaredMethods())
             if (method.isAnnotationPresent(SubscribeEvent.class)) {
-                me.retucio.sputnik.Sputnik.EVENT_BUS.register(this);
+                Sputnik.EVENT_BUS.register(this);
                 break;
         }
-        me.retucio.sputnik.Sputnik.EVENT_BUS.post(new ToggleModuleEvent(this));
+        Sputnik.EVENT_BUS.post(new ToggleModuleEvent(this));
     }
 
     public void onDisable() {
         if (notify.isEnabled()) ChatUtil.info(getName() + " fue desactivado");
-        if (me.retucio.sputnik.Sputnik.EVENT_BUS.isRegistered(this))
-            me.retucio.sputnik.Sputnik.EVENT_BUS.unregister(this);
-        me.retucio.sputnik.Sputnik.EVENT_BUS.post(new ToggleModuleEvent(this));
+        if (Sputnik.EVENT_BUS.isRegistered(this))
+            Sputnik.EVENT_BUS.unregister(this);
+        Sputnik.EVENT_BUS.post(new ToggleModuleEvent(this));
     }
 
 

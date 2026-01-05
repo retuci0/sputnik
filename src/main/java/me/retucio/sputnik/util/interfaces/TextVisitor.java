@@ -23,14 +23,6 @@ public interface TextVisitor<T> {
         return text.visit((style, string) -> visitor.accept(queue.remove(), style, string), baseStyle);
     }
 
-    /**
-     * Collapses the tree of {@link Text} siblings into a one dimensional FIFO {@link Queue}. To match the behaviours of
-     * the {@link Text#visit(StringVisitable.Visitor)} and {@link Text#visit(StringVisitable.StyledVisitor, Style)}
-     * methods, texts with empty contents (created from {@link Text#empty()}) are ignored but their siblings are still
-     * processed.
-     * @param text the text
-     * @return the text and its siblings in the order they appear when rendered.
-     */
     static ArrayDeque<Text> collectSiblings(Text text) {
         ArrayDeque<Text> queue = new ArrayDeque<>();
         collectSiblings(text, queue);

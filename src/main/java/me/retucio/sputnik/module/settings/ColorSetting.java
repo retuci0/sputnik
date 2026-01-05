@@ -270,8 +270,8 @@ public class ColorSetting extends Setting {
         map.put("a", a);
         map.put("rb", rainbow);
         map.put("rs", rainbowSpeed);
-        map.put("sat", saturation);
-        map.put("bri", brightness);
+        map.put("sat", (double) saturation);
+        map.put("bri", (double) brightness);
         return map;
     }
 }

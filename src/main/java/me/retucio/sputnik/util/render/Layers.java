@@ -1,5 +1,6 @@
 package me.retucio.sputnik.util.render;
 
+import me.retucio.sputnik.Sputnik;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderSetup;
 
@@ -31,11 +32,11 @@ public class Layers {
     }
 
     static {
-        LINES = RenderLayer.of(me.retucio.sputnik.Sputnik.MOD_ID + "_lines", RenderSetup.builder(LINES_PIPELINE).build());
-        LINES_CULL = RenderLayer.of(me.retucio.sputnik.Sputnik.MOD_ID + "_lines_cull", RenderSetup.builder(LINES_CULL_PIPELINE).build());
+        LINES = RenderLayer.of(Sputnik.MOD_ID + "_lines", RenderSetup.builder(LINES_PIPELINE).build());
+        LINES_CULL = RenderLayer.of(Sputnik.MOD_ID + "_lines_cull", RenderSetup.builder(LINES_CULL_PIPELINE).build());
 
-        QUADS = RenderLayer.of(me.retucio.sputnik.Sputnik.MOD_ID + "_quads", RenderSetup.builder(QUADS_PIPELINE).build());
-        QUADS_CULL = RenderLayer.of(me.retucio.sputnik.Sputnik.MOD_ID + "quads_cull", RenderSetup.builder(QUADS_CULL_PIPELINE).build());
+        QUADS = RenderLayer.of(Sputnik.MOD_ID + "_quads", RenderSetup.builder(QUADS_PIPELINE).build());
+        QUADS_CULL = RenderLayer.of(Sputnik.MOD_ID + "quads_cull", RenderSetup.builder(QUADS_CULL_PIPELINE).build());
     }
 
 }

@@ -1,5 +1,6 @@
 package me.retucio.sputnik.module.settings;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.events.sputnik.UpdateSettingEvent;
 import me.retucio.sputnik.module.Module;
 
@@ -52,6 +53,6 @@ public abstract class Setting {
     }
 
     public void fireUpdateEvent() {
-        me.retucio.sputnik.Sputnik.EVENT_BUS.post(new UpdateSettingEvent(this, module.shouldSaveSettings()));
+        Sputnik.EVENT_BUS.post(new UpdateSettingEvent(this, module.shouldSaveSettings()));
     }
 }

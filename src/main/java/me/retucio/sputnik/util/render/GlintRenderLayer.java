@@ -3,6 +3,7 @@ package me.retucio.sputnik.util.render;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.module.modules.render.GlintPlus;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.*;
@@ -55,7 +56,7 @@ public class GlintRenderLayer extends RenderLayer {
     }
 
     private static RenderLayer buildGlintRenderLayer(String name) {
-        final Identifier res = Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, "textures/misc/glint_" + name.toLowerCase() + ".png");
+        final Identifier res = Identifier.of(Sputnik.MOD_ID, "textures/misc/glint_" + name.toLowerCase() + ".png");
 
         return RenderLayer.of("glint_" + name, RenderSetup.builder(RenderPipelines.GLINT)
                 .texture("Sampler0", res)
@@ -66,7 +67,7 @@ public class GlintRenderLayer extends RenderLayer {
     }
 
     private static RenderLayer buildEntityGlintRenderLayer(String name) {
-        final Identifier res = Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, "textures/misc/glint_" + name.toLowerCase() + ".png");
+        final Identifier res = Identifier.of(Sputnik.MOD_ID, "textures/misc/glint_" + name.toLowerCase() + ".png");
 
         return RenderLayer.of("entity_glint_" + name, RenderSetup.builder(RenderPipelines.GLINT)
                 .texture("Sampler0", res)
@@ -78,7 +79,7 @@ public class GlintRenderLayer extends RenderLayer {
 
 
     private static RenderLayer buildArmorEntityGlintRenderLayer(String name) {
-        final Identifier res = Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, "textures/misc/glint_" + name.toLowerCase() + ".png");
+        final Identifier res = Identifier.of(Sputnik.MOD_ID, "textures/misc/glint_" + name.toLowerCase() + ".png");
 
         return RenderLayer.of("armor_glint_" + name, RenderSetup.builder(RenderPipelines.GLINT)
                 .texture("Sampler0", res)

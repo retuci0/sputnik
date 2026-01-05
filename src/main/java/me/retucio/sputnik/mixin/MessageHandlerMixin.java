@@ -31,7 +31,7 @@ public abstract class MessageHandlerMixin implements IMessageHandler {
     }
 
     @Override
-    public GameProfile smegma$getSender() {
+    public GameProfile sputnik$getSender() {
         return sender;
     }
 }

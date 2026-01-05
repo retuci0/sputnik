@@ -127,7 +127,7 @@ public class ChatPlus extends Module {
         if (!isEnabled() || !showHeads.isEnabled()) return;
 
         // dibujar la cabeza al principio del mensaje
-        if (((IChatHudLineVisible) (Object) line).smegma$isStartOfEntry())
+        if (((IChatHudLineVisible) (Object) line).sputnik$isStartOfEntry())
             drawTexture(context, (IChatHudLine) (Object) line, y, color);
 
         context.getMatrices().pushMatrix();
@@ -142,7 +142,7 @@ public class ChatPlus extends Module {
 
     @SuppressWarnings("DataFlowIssue")
     private void drawTexture(DrawContext context, IChatHudLine line, int y, int color) {
-        String text = line.smegma$getText().trim();
+        String text = line.sputnik$getText().trim();
 
         int startOffset = 0;
 
@@ -173,7 +173,7 @@ public class ChatPlus extends Module {
     @SuppressWarnings("DataFlowIssue")
     private GameProfile getSender(IChatHudLine line, String text) {
         // obtener el jugador que envió un mensaje
-        GameProfile sender = line.smegma$getSender();
+        GameProfile sender = line.sputnik$getSender();
 
         if (sender == null) {
             Matcher usernameMatcher = usernameRegex.matcher(text);

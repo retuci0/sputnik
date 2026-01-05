@@ -4,5 +4,5 @@ import com.mojang.authlib.GameProfile;
 
 public interface IMessageHandler {
 
-    GameProfile smegma$getSender();
+    GameProfile sputnik$getSender();
 }

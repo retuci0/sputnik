@@ -1,5 +1,6 @@
-package me.retucio.sputnik.event;
+package me.retucio.sputnik.event.events;
 
+import me.retucio.sputnik.event.Event;
 import net.minecraft.client.world.ClientWorld;
 
 

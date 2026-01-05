@@ -17,9 +17,10 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
-// para autocompletar entidades
 import static me.retucio.sputnik.Sputnik.mc;
 
+
+// para autocompletar entidades
 public class EntityArgumentType implements ArgumentType<Entity> {
 
     public static final EntityArgumentType INSTANCE = new EntityArgumentType();

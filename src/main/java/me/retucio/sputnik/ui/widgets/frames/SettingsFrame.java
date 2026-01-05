@@ -1,5 +1,6 @@
 package me.retucio.sputnik.ui.widgets.frames;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.events.sputnik.SettingsFrameEvent;
 import me.retucio.sputnik.module.Module;
 import me.retucio.sputnik.module.settings.*;
@@ -130,7 +131,9 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
         super.mouseReleased(mouseX, mouseY, button);
         if (button == 0) {
             dragging = false;
-            me.retucio.sputnik.Sputnik.EVENT_BUS.post(new SettingsFrameEvent.Move(this));
+
+            if (isHovered(mouseX, mouseY))
+                Sputnik.EVENT_BUS.post(new SettingsFrameEvent.Move(this));
         }
 
         for (SettingButton<?> sb : visibleButtons)
@@ -142,9 +145,6 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
         for (SettingButton<?> sb : visibleButtons)
             sb.mouseDragged(mouseX, mouseY);
     }
-
-    @Override
-    public void onKey(int key, int action) {}
 
     @Override
     public void updateWidth() {

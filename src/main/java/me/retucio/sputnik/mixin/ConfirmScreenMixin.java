@@ -33,7 +33,7 @@ public abstract class ConfirmScreenMixin extends Screen implements IConfirmScree
     }
 
     @Override
-    public void smegma$setBypassAction(Runnable bypass) {
+    public void sputnik$setBypassAction(Runnable bypass) {
         this.bypassAction = bypass;
     }
 }

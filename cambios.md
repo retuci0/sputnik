@@ -1,17 +1,18 @@
-# v2.3
+# v2.4
 
 ## novedades
 
-- renombrado el mod a sputnik porque esmegma o cameratweaks era un asco y sputnik ta to wapo
+ahora se usa el formato binario (.dat) en vez de .json para guardar ajustes, lo que los hace más rápidos, y el archivo más liviano
 
 ### adiciones
 
 #### módulos nuevos:
 
+- capas: cambia (solo visualmente, para ti) la capa que usas a una custom de las disponibles
+
 ### arreglos / mejoras
 
-- ahora tienes un múltiplo en críticos, es decir, un número por el que se multiplica la cantidad de partículas a generar
-- ya no se guardan los ajustes mientras se cargan
+- renombrado bien todo que lo hice con prisa
 
 ## problemas reconocidos
 

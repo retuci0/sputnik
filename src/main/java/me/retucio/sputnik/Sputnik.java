@@ -1,6 +1,7 @@
 package me.retucio.sputnik;
 
 
+import me.retucio.sputnik.cape.CapeManager;
 import me.retucio.sputnik.command.CommandManager;
 import me.retucio.sputnik.command.commands.BindCommand;
 
@@ -9,14 +10,15 @@ import me.retucio.sputnik.config.ConfigManager;
 import me.retucio.sputnik.event.EventBus;
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.ShutdownEvent;
-
+import me.retucio.sputnik.event.events.sputnik.LoadCapeManagerEvent;
 import me.retucio.sputnik.event.events.sputnik.LoadClickGUIEvent;
 import me.retucio.sputnik.event.events.sputnik.LoadCommandManagerEvent;
 import me.retucio.sputnik.event.events.sputnik.LoadModuleManagerEvent;
+
 import me.retucio.sputnik.module.Module;
 import me.retucio.sputnik.module.ModuleManager;
-
 import me.retucio.sputnik.module.modules.client.HUD;
+
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.ui.hud.HudEditorScreen;
 import me.retucio.sputnik.ui.widgets.buttons.settings.BindButton;
@@ -24,21 +26,19 @@ import me.retucio.sputnik.ui.widgets.buttons.SettingButton;
 import me.retucio.sputnik.ui.widgets.buttons.settings.TextButton;
 import me.retucio.sputnik.ui.widgets.frames.settings.ClientSettingsFrame;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
-
 import me.retucio.sputnik.ui.widgets.Button;
+
 import me.retucio.sputnik.util.*;
-
-
 import me.retucio.sputnik.util.render.DrawUtil;
 import me.retucio.sputnik.util.render.RenderUtil;
-import net.fabricmc.api.ClientModInitializer;
 
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
-
 import net.minecraft.client.gui.screen.ingame.AbstractCommandBlockScreen;
 import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
@@ -85,6 +85,9 @@ public class Sputnik implements ClientModInitializer {
         EVENT_BUS.register(RenderUtil.class);
 
         Lists.init();
+
+        CapeManager.INSTANCE = new CapeManager();
+        EVENT_BUS.post(new LoadCapeManagerEvent());
 
         ModuleManager.INSTANCE = new ModuleManager();
         EVENT_BUS.post(new LoadModuleManagerEvent());

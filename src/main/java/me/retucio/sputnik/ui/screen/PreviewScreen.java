@@ -1,5 +1,6 @@
 package me.retucio.sputnik.ui.screen;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.module.modules.misc.ShulkerPeek;
 import me.retucio.sputnik.ui.widgets.frames.settings.ClientSettingsFrame;
 import me.retucio.sputnik.util.Colors;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class PreviewScreen extends Screen {
 
-    private static final Identifier TEXTURE = Identifier.of(me.retucio.sputnik.Sputnik.MOD_ID, "textures/gui/preview.png");
+    private static final Identifier TEXTURE = Identifier.of(Sputnik.MOD_ID, "textures/gui/preview.png");
 
     private int x, y;
     private final int bgWidth = 176;

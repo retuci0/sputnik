@@ -1,16 +1,15 @@
 package me.retucio.sputnik.module.settings;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 public class OptionSetting<T> extends Setting{
 
-    List<T> options = new ArrayList<>();
-    Map<T, String> displayNames;
-    T option;
-    T defaultOption;
+    private final List<T> options;
+    private Map<T, String> displayNames;
+    private T option;
+    private final T defaultOption;
 
     private Consumer<T> updateListener;
 
@@ -39,6 +38,20 @@ public class OptionSetting<T> extends Setting{
         if (updateListener != null) updateListener.accept(option);
     }
 
+    public void setValueByName(String name) {
+        for (T opt : options) {
+            if (displayNames != null && !displayNames.isEmpty()) {
+                if (displayNames.get(opt).equals(name)) {
+                    setValue(opt);
+                    return;
+                }
+            } else if (opt.toString().equals(name)) {
+                setValue(opt);
+                return;
+            }
+        }
+    }
+
     public List<T> getOptions() {
         return options;
     }
@@ -62,6 +75,10 @@ public class OptionSetting<T> extends Setting{
             index += 1;
         }
         return index;
+    }
+
+    public void setIndex(int index) {
+        setValue(getOption(index));
     }
 
     public boolean is(T option) {
@@ -93,5 +110,9 @@ public class OptionSetting<T> extends Setting{
     public String getDisplayName(T key) {
         if (displayNames != null) return displayNames.get(key);
         return key.toString();
+    }
+
+    public String getDisplayName() {
+        return getDisplayName(option);
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IChatHud {
 
-    void smegma$add(Text message, int id);
+    void sputnik$add(Text message, int id);
 
-    List<ChatHudLine.Visible> smegma$getVisibleMessages();
+    List<ChatHudLine.Visible> sputnik$getVisibleMessages();
 }

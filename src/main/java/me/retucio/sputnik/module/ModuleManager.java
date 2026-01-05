@@ -1,5 +1,6 @@
 package me.retucio.sputnik.module;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.module.modules.camera.*;
 import me.retucio.sputnik.module.modules.client.HUD;
@@ -38,6 +39,7 @@ public class ModuleManager {
         modules.add(new BossbarStack());
         modules.add(new BreakingProgress());
         modules.add(new BungeecordSpoofer());
+        modules.add(new Capes());
         modules.add(new ChatPlus());
         modules.add(new ColoredSigns());
         modules.add(new CritsPlus());
@@ -80,7 +82,7 @@ public class ModuleManager {
         for (Module module : getEnabledModules()) {
             for (Method method : module.getClass().getDeclaredMethods()) {
                 if (method.isAnnotationPresent(SubscribeEvent.class)) {
-                    me.retucio.sputnik.Sputnik.EVENT_BUS.register(module);
+                    Sputnik.EVENT_BUS.register(module);
                     break;
                 }
             }

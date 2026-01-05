@@ -27,7 +27,7 @@ public class UIMove extends Module {
     private final ScreenHandlerType<?> inventoryHandlerType = ScreenHandlerType.register(
             "player_inventory", GenericContainerScreenHandler::createGeneric9x3);
     private final ScreenHandlerType<?> clickGuiHandlerType = ScreenHandlerType.register(
-            "camtweaks_clickgui", GenericContainerScreenHandler::createGeneric9x3);  // 9x3 porque no importa (creo)
+            "sputnik_clickgui", GenericContainerScreenHandler::createGeneric9x3);  // 9x3 porque no importa (creo)
 
     public UIMove() {
         super("moverse en interfaz",

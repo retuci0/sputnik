@@ -45,7 +45,7 @@ public abstract class ClientCommonNetworkHandlerMixin {
         if (!bypassPack.isEnabled()) return;
 
         final Screen screen = cir.getReturnValue();
-        ((IConfirmScreen) screen).smegma$setBypassAction(() -> {
+        ((IConfirmScreen) screen).sputnik$setBypassAction(() -> {
             client.setScreen(((ConfirmServerResourcePackScreenAccessor) screen).getParentScreen());
             if (this.serverInfo != null) {
                 this.serverInfo.setResourcePackPolicy(bypassPack.getPolicy());

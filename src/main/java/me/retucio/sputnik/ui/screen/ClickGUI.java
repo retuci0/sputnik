@@ -1,5 +1,6 @@
 package me.retucio.sputnik.ui.screen;
 
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.KeyEvent;
 import me.retucio.sputnik.event.events.MouseClickEvent;
@@ -57,7 +58,7 @@ public class ClickGUI extends Screen {
     public ClickGUI() {
         super(Text.of("interfaz"));
         settingsFrames.add(guiSettingsFrame);
-        me.retucio.sputnik.Sputnik.EVENT_BUS.register(this);
+        Sputnik.EVENT_BUS.register(this);
     }
 
     @Override
@@ -179,9 +180,9 @@ public class ClickGUI extends Screen {
     @SubscribeEvent
     public void onMouseMiddleButton(MouseClickEvent event) {
         // mover todos los marcos a un punto visible al presionar shift + la rueda del ratón
-        if (me.retucio.sputnik.Sputnik.mc.currentScreen != this || event.getButton() != 2 || !KeyUtil.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) return;
+        if (Sputnik.mc.currentScreen != this || event.getButton() != 2 || !KeyUtil.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) return;
 
-        int h = me.retucio.sputnik.Sputnik.mc.getWindow().getScaledHeight();
+        int h = Sputnik.mc.getWindow().getScaledHeight();
         int minY = Math.min(modulesFrame.getY(), settingsFrames.stream().mapToInt(Frame::getY).min().orElse(modulesFrame.getY()));
         int maxY = Math.max(modulesFrame.getY() + modulesFrame.getH(), settingsFrames.stream().mapToInt(sf -> sf.getY() + sf.getH()).max().orElse(modulesFrame.getY() + modulesFrame.getH()));
         int correction = minY < 0 ? -minY + 4 : (maxY > h ? h - maxY - 4 : 0);
@@ -247,10 +248,18 @@ public class ClickGUI extends Screen {
 
     // abrir un marco donde se encuentran los ajustes del módulo deseado
     public void openSettingsFrame(Module module, int x, int y) {
-        if (isSettingsFrameOpen(module)) return;  // permitir un solo marco de ajustes por módulo
-        SettingsFrame frame = new SettingsFrame(module, x, y, 120, 20);
+        for (SettingsFrame frame : settingsFrames) {
+            if (frame.module == module) {
+                frame.setX(x);
+                frame.setY(y);
+                return;
+            }
+        }
+
+        SettingsFrame frame = new SettingsFrame(module, x, y, 100, 20);
         settingsFrames.add(frame);
-        me.retucio.sputnik.Sputnik.EVENT_BUS.post(new SettingsFrameEvent.Open(frame));
+
+        Sputnik.EVENT_BUS.post(new SettingsFrameEvent.Open(frame));
     }
 
     // abrir un marco de ajustes específicamente para ajustes de selección múltiple
@@ -268,7 +277,7 @@ public class ClickGUI extends Screen {
             if ((sf instanceof ColorPickerFrame cpf && cpf.dummyModule == module)  // para los selectores de colores
                     || (!(sf instanceof ColorPickerFrame) && sf.module == module)) { // lógica muy mierdas, lo sé, pero paso de hacerlo bien
                 toRemove.add(sf);
-                me.retucio.sputnik.Sputnik.EVENT_BUS.post(new SettingsFrameEvent.Close(sf));
+                Sputnik.EVENT_BUS.post(new SettingsFrameEvent.Close(sf));
                 unselect(sf);
             }
         }

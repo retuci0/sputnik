@@ -1,6 +1,6 @@
 package me.retucio.sputnik.module.modules.network;
 
-import me.retucio.sputnik.event.JoinWorldEvent;
+import me.retucio.sputnik.event.events.JoinWorldEvent;
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.PacketEvent;
 import me.retucio.sputnik.module.Category;

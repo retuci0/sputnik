@@ -2,6 +2,7 @@ package me.retucio.sputnik.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.module.Module;
 import me.retucio.sputnik.module.ModuleManager;
 import me.retucio.sputnik.module.settings.*;
@@ -10,20 +11,20 @@ import me.retucio.sputnik.ui.widgets.frames.ModuleFrame;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.ui.widgets.frames.settings.ClientSettingsFrame;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
+import me.retucio.sputnik.util.ChatUtil;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 // se ocupa de guardar, cargar y aplicar ajustes
-// pues no me ha dado dolores de cabeza el coso este con los NPE de los cojones...
 public class ConfigManager {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final File CONFIG_FILE = new File("sputnik.json");
+    private static final File CONFIG_FILE = new File("sputnik.dat");
+    private static final File LEGACY_JSON_FILE = new File("sputnik.json");
 
     private static boolean loaded = false;
     private static ClientConfig config = null;
@@ -36,31 +37,44 @@ public class ConfigManager {
         if (!loaded) return;
         ensureConfig();
 
-        try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
-            GSON.toJson(config, writer);
-            me.retucio.sputnik.Sputnik.LOGGER.info("ajustes guardados");
+        try {
+            BinarySerializer.writeConfig(config, CONFIG_FILE);
+            Sputnik.LOGGER.info("ajustes guardados");
         } catch (IOException e) {
-            me.retucio.sputnik.Sputnik.LOGGER.error("error al guardar ajustes", e);
+            Sputnik.LOGGER.error("error al guardar ajustes", e);
         }
     }
 
-    // cargar configuraciones
     public static void load() {
-        me.retucio.sputnik.Sputnik.LOGGER.info("cargando ajustes...");
+        Sputnik.LOGGER.info("cargando ajustes...");
 
-        if (!CONFIG_FILE.exists()) {
-            ensureConfig();
-            save();
-            return;
+        if (CONFIG_FILE.exists()) {
+            try {
+                config = BinarySerializer.readConfig(CONFIG_FILE);
+                Sputnik.LOGGER.info("ajustes cargados");
+                return;
+            } catch (IOException e) {
+                Sputnik.LOGGER.error("error cargando ajustes, intentando json", e);
+            }
         }
 
-        try (FileReader reader = new FileReader(CONFIG_FILE)) {
-            config = GSON.fromJson(reader, ClientConfig.class);
-            me.retucio.sputnik.Sputnik.LOGGER.info("ajustes cargados");
-        } catch (IOException e) {
-            me.retucio.sputnik.Sputnik.LOGGER.error("no se pudieron cargar los ajustes, usando ajustes por defecto", e);
-            ensureConfig();
+        // Fallback to legacy JSON
+        if (LEGACY_JSON_FILE.exists()) {
+            try (FileReader reader = new FileReader(LEGACY_JSON_FILE)) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                config = gson.fromJson(reader, ClientConfig.class);
+                Sputnik.LOGGER.info("ajustes json cargados (migración)");
+
+                save();
+                return;
+            } catch (IOException e) {
+                Sputnik.LOGGER.error("error cargando json, usando defaults", e);
+            }
         }
+
+        // crear nuevo config
+        ensureConfig();
+        save();
     }
 
     // aplicar configuraciones cargadas
@@ -75,7 +89,7 @@ public class ConfigManager {
         applyExtendableFrames();
 
         loaded = true;
-        me.retucio.sputnik.Sputnik.LOGGER.info("ajustes aplicados");
+        Sputnik.LOGGER.info("ajustes aplicados");
     }
 
     // obtener configuración actual
@@ -101,7 +115,10 @@ public class ConfigManager {
 
     public static void setFramePosition(SettingsFrame frame) {
         ensureConfig();
-        config.settingsFrames.put(frame.module.getName(), new int[] {frame.getX(), frame.getY()});
+        if (!config.settingsFrames.containsKey(frame.module.getName()))
+            config.settingsFrames.put(frame.module.getName(), new int[] {frame.getX(), frame.getY()});
+        else
+            config.settingsFrames.replace(frame.module.getName(), new int[] {frame.getX(), frame.getY()});
         save();
     }
 
@@ -160,7 +177,7 @@ public class ConfigManager {
             case ListSetting listSetting -> applyListSetting(listSetting, value);
             case ColorSetting colorSetting -> applyColorSetting(colorSetting, value);
             case OptionSetting optionSetting -> applyOptionSetting(optionSetting, value);
-            default -> me.retucio.sputnik.Sputnik.LOGGER.warn("watafac queseso: {}", setting.getClass().getSimpleName());
+            default -> Sputnik.LOGGER.warn("watafac queseso: {}", setting.getClass().getSimpleName());
         }
     }
 
@@ -170,14 +187,14 @@ public class ConfigManager {
                 module.setEnabled(config.moduleStates.get(module.getName()));
             }
         });
-        me.retucio.sputnik.Sputnik.LOGGER.info("estados de módulos aplicados");
+        Sputnik.LOGGER.info("estados de módulos aplicados");
     }
 
     private static void applyModuleSettings() {
         ModuleManager.INSTANCE.getModules().forEach(module -> {
             module.getSettings().forEach(setting -> applySetting(module, setting));
         });
-        me.retucio.sputnik.Sputnik.LOGGER.info("ajustes de módulos aplicados");
+        Sputnik.LOGGER.info("ajustes de módulos aplicados");
     }
 
     private static void applySettingsFrames() {
@@ -185,7 +202,7 @@ public class ConfigManager {
             Module module = ModuleManager.INSTANCE.getModuleByName(moduleName);
             ClickGUI.INSTANCE.openSettingsFrame(module, position[0], position[1]);
         });
-        me.retucio.sputnik.Sputnik.LOGGER.info("estados de marcos de ajustes aplicados");
+        Sputnik.LOGGER.info("estados de marcos de ajustes aplicados");
     }
 
     private static void applySearchBarPosition() {
@@ -193,7 +210,7 @@ public class ConfigManager {
             ClickGUI.INSTANCE.getSearchBar().setX(config.searchBarPosition[0]);
             ClickGUI.INSTANCE.getSearchBar().setY(config.searchBarPosition[1]);
         }
-        me.retucio.sputnik.Sputnik.LOGGER.info("posición de la barra de búsqueda aplicada");
+        Sputnik.LOGGER.info("posición de la barra de búsqueda aplicada");
     }
 
     private static void applyGuiSettings() {
@@ -201,14 +218,14 @@ public class ConfigManager {
         ClientSettingsFrame.guiSettings.getSettings().forEach(setting -> {
             applySetting(ClientSettingsFrame.guiSettings, setting);
         });
-        me.retucio.sputnik.Sputnik.LOGGER.info("ajustes del cliente aplicados");
+        Sputnik.LOGGER.info("ajustes del cliente aplicados");
     }
 
     private static void applyExtendableFrames() {
         applyExtendableFrame(ClickGUI.INSTANCE.getModulesFrame());
         applyExtendableFrame(ClickGUI.INSTANCE.getGuiSettingsFrame());
 
-        me.retucio.sputnik.Sputnik.LOGGER.info("posiciones de marcos extendibles aplicadasa");
+        Sputnik.LOGGER.info("posiciones de marcos extendibles aplicadas");
         ClickGUI.INSTANCE.refreshListButtons();
     }
 
@@ -299,9 +316,8 @@ public class ConfigManager {
     }
 
     private static <T> void applyOptionSetting(OptionSetting<T> setting, Object value) {
-        if (value instanceof Double) {
-            int index = ((Double) value).intValue();
-            setting.setValue(setting.getOption(index));
+        if (value instanceof String name) {
+            setting.setValueByName(name);
         }
     }
 
@@ -316,9 +332,8 @@ public class ConfigManager {
     // ------------------ MÉTODOS DE AYUDA ------------------
 
     private static boolean shouldApply() {
-        return me.retucio.sputnik.Sputnik.mc != null && ModuleManager.INSTANCE != null && config != null;
+        return Sputnik.mc != null && ModuleManager.INSTANCE != null && config != null;
     }
-
 
     private static void ensureConfig() {
         if (config == null) config = new ClientConfig();

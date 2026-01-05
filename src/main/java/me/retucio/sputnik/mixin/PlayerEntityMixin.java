@@ -1,6 +1,7 @@
 package me.retucio.sputnik.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.events.ClipAtLedgeEvent;
 import me.retucio.sputnik.module.ModuleManager;
 import me.retucio.sputnik.module.modules.render.Nametags;
@@ -56,7 +57,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
     private void clipAtLedge(CallbackInfoReturnable<Boolean> cir) {
         if (!getEntityWorld().isClient()) return;
-        ClipAtLedgeEvent event = me.retucio.sputnik.Sputnik.EVENT_BUS.post(new ClipAtLedgeEvent(isSneaking()));
+        ClipAtLedgeEvent event = Sputnik.EVENT_BUS.post(new ClipAtLedgeEvent(isSneaking()));
         cir.setReturnValue(event.isClipping());
     }
 }
