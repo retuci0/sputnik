@@ -1,5 +1,6 @@
-package me.retucio.sputnik.module.settings;
+package me.retucio.sputnik.module.setting.settings;
 
+import me.retucio.sputnik.module.setting.Setting;
 import me.retucio.sputnik.util.Colors;
 import net.minecraft.text.Text;
 

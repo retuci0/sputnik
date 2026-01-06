@@ -2,8 +2,8 @@ package me.retucio.sputnik.ui.widgets.buttons.settings;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.ListSetting;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.ListSetting;
 import me.retucio.sputnik.ui.widgets.buttons.SettingButton;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
@@ -90,7 +90,7 @@ public class ListButton<T> extends SettingButton<ListSetting<T>> {
                 .sorted(Comparator.comparing(setting::getDisplayName, String.CASE_INSENSITIVE_ORDER))
                 .forEach(option -> {
                     String displayName = setting.getDisplayName(option);
-                    BooleanSetting b = dummy.addSetting(new BooleanSetting(
+                    BooleanSetting b = dummy.getSg("general").add(new BooleanSetting(
                             displayName,
                             "incluir " + displayName,
                             setting.isEnabled(option)

@@ -120,7 +120,6 @@ public class Sputnik implements ClientModInitializer {
     // se ejecuta cada vez que se presiona una tecla
     public void onKey(int key, int action) {
         if (key == GLFW.GLFW_KEY_F3) return;  // prevenir activación de módulos al usar combinaciones de F3
-        ModuleManager.INSTANCE.getEnabledModules().forEach(module -> module.onKey(key, action));
 
         boolean anyFocused = isAnySettingButtonFocused() || ClickGUI.INSTANCE.getSearchBar().isFocused();
         ClickGUI.INSTANCE.setAnyFocused(anyFocused);

@@ -1,5 +1,7 @@
 accessWidener   v2  named
 
+accessible class net/minecraft/client/MinecraftClient$LoadingContext
+
 accessible field net/minecraft/client/texture/TextureManager textures Ljava/util/Map;
 
 accessible method net/minecraft/network/ClientConnection handleQueuedTasks ()V
@@ -11,6 +13,7 @@ accessible class net/minecraft/client/network/ClientCommonNetworkHandler$Confirm
 accessible class net/minecraft/client/network/ClientCommonNetworkHandler$ConfirmServerResourcePackScreen$Pack
 
 accessible class net/minecraft/client/font/TextRenderer$Drawer
+accessible method net/minecraft/client/font/FontManager getStorageInternal (Lnet/minecraft/util/Identifier;)Lnet/minecraft/client/font/FontStorage;
 
 accessible method net/minecraft/entity/Entity setFlag (IZ)V
 accessible method net/minecraft/entity/player/PlayerEntity canGlide ()Z

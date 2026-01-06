@@ -5,8 +5,8 @@ import me.retucio.sputnik.event.events.KeyEvent;
 import me.retucio.sputnik.mixin.accessor.HandledScreenAccessor;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.KeySetting;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.KeySetting;
 import me.retucio.sputnik.ui.screen.PreviewScreen;
 import me.retucio.sputnik.util.ChatUtil;
 import me.retucio.sputnik.util.Colors;
@@ -29,8 +29,8 @@ import java.util.HashMap;
 
 public class ShulkerPeek extends Module {
 
-    public KeySetting previewKey = addSetting(new KeySetting("tecla de previsualización", "tecla a mantener para previsualizar", GLFW.GLFW_KEY_LEFT_ALT));
-    public BooleanSetting showTooltips = addSetting(new BooleanSetting("mostrar tooltips", "añadir texto a los tooltips (cajas de texto) de los shulkers", true));
+    public KeySetting previewKey = sgGeneral.add(new KeySetting("tecla de previsualización", "tecla a mantener para previsualizar", GLFW.GLFW_KEY_LEFT_ALT));
+    public BooleanSetting showTooltips = sgGeneral.add(new BooleanSetting("mostrar tooltips", "añadir texto a los tooltips (cajas de texto) de los shulkers", true));
 
     public static final HashMap<Item, Color> SHULKER_COLORS = new HashMap<>();
 

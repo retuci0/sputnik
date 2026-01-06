@@ -2,7 +2,7 @@ package me.retucio.sputnik.module.modules.render;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
 
 import java.awt.*;
 
@@ -12,7 +12,7 @@ import java.awt.*;
 
 public class BlockOutline extends Module {
 
-    public ColorSetting color = addSetting(new ColorSetting("color", "color del contorno de los bloques",
+    public ColorSetting color = sgGeneral.add(new ColorSetting("color", "color del contorno de los bloques",
             new Color(0, 0, 0, 102), true));
 
     public BlockOutline() {

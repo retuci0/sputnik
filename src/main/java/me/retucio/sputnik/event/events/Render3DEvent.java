@@ -9,13 +9,13 @@ import net.minecraft.client.util.math.MatrixStack;
 /**
  * @see me.retucio.sputnik.mixin.WorldRendererMixin#render
  */
-public class RenderWorldEvent extends Event {
+public class Render3DEvent extends Event {
 
     private final MatrixStack matrices;
     private final RenderTickCounter tc;
     private final Camera camera;
 
-    public RenderWorldEvent(MatrixStack matrices, RenderTickCounter tc, Camera camera) {
+    public Render3DEvent(MatrixStack matrices, RenderTickCounter tc, Camera camera) {
         this.matrices = matrices;
         this.tc = tc;
         this.camera = camera;

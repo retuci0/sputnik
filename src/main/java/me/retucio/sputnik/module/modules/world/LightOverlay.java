@@ -1,12 +1,13 @@
 package me.retucio.sputnik.module.modules.world;
 
 import me.retucio.sputnik.event.SubscribeEvent;
-import me.retucio.sputnik.event.events.RenderWorldEvent;
+import me.retucio.sputnik.event.events.Render3DEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.ColorSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.render.RenderUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.Blocks;
@@ -20,20 +21,25 @@ import java.util.List;
 
 public class LightOverlay extends Module {
 
-    public NumberSetting radius = addSetting(new NumberSetting("radio", "radio a tener en cuenta al renderizar superposición",
+    SettingGroup sgDetection = addSg(new SettingGroup("detección", true));
+    SettingGroup sgColors = addSg(new SettingGroup("colores", true));
+
+    public NumberSetting radius = sgDetection.add(new NumberSetting("radio", "radio a tener en cuenta al renderizar superposición",
             16, 5, 128, 1));
-    public NumberSetting yRadius = addSetting(new NumberSetting("rango vertical", "distancia vertical a tener en cuenta",
+    public NumberSetting yRadius = sgDetection.add(new NumberSetting("rango vertical", "distancia vertical a tener en cuenta",
             4, 1, 16, 1));
 
-    public NumberSetting interval = addSetting(new NumberSetting("intervalo", "cada cuántos ticks comprobar el nivel de luz",
+    public NumberSetting interval = sgDetection.add(new NumberSetting("intervalo", "cada cuántos ticks comprobar el nivel de luz",
             10, 1, 80, 1));
 
-    public ColorSetting lightColor = addSetting(new ColorSetting("color de la luz", "color de los bloques con luz",
+    public BooleanSetting onWater = sgDetection.add(new BooleanSetting("en agua", "mostrar también bloques cubiertos en agua", true));
+    public BooleanSetting dontCullWater = sgDetection.add(new BooleanSetting("evitar culling en agua", "mostrar superposición a través de bloques para poder verla desde fuera del agua", false));
+
+    public ColorSetting lightColor = sgColors.add(new ColorSetting("color de la luz", "color de los bloques con luz",
             new Color(0, 255, 0, 67), false));
-    public ColorSetting darknessColor = addSetting(new ColorSetting("color de oscuridad", "color de bloques con 0 luz",
+    public ColorSetting darknessColor = sgColors.add(new ColorSetting("color de oscuridad", "color de bloques con 0 luz",
             new Color(255, 0, 0, 67), false));
 
-    public BooleanSetting onWater = addSetting(new BooleanSetting("en agua", "mostrar también bloques cubiertos en agua", true));
 
     List<BlockPos> blocks = new ArrayList<>();
 
@@ -44,7 +50,7 @@ public class LightOverlay extends Module {
     }
 
     @SubscribeEvent
-    public void onRenderWorld(RenderWorldEvent event) {
+    public void onRenderWorld(Render3DEvent event) {
         if (mc.player == null || mc.world == null) return;
         if (mc.player.age % interval.getIntValue() == 0) {
             blocks = findExposedBlocks(
@@ -65,7 +71,8 @@ public class LightOverlay extends Module {
                             (lightColor.getB() / 15) * light,
                             lightColor.getA());
 
-            RenderUtil.drawBlockFaceFilled(event.getMatrices(), block, Direction.UP, color, 0.001f, true);
+            boolean shouldCull = !(onWater.isEnabled() && mc.world.getBlockState(block.up()).isOf(Blocks.WATER) && dontCullWater.isEnabled());
+            RenderUtil.drawBlockFaceFilled(event.getMatrices(), block, Direction.UP, color, 0.001f, shouldCull);
         }
     }
 

@@ -3,8 +3,8 @@ package me.retucio.sputnik.module.modules.camera;
 import me.retucio.sputnik.mixin.accessor.StatusEffectInstanceAccessor;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.ColorSetting;
-import me.retucio.sputnik.module.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.registry.Registries;
@@ -18,9 +18,9 @@ import java.awt.*;
 
 public class Fullbright extends Module {
 
-    public EnumSetting<Modes> mode = addSetting(new EnumSetting<>("modo", "qué modo de iluminación emplear (usar poción con shaders)", Modes.class, Modes.GAMMA));
+    public EnumSetting<Modes> mode = sgGeneral.add(new EnumSetting<>("modo", "qué modo de iluminación emplear (usar poción con shaders)", Modes.class, Modes.GAMMA));
 
-    public ColorSetting color = addSetting(new ColorSetting("filtro", "filtro de color", new Color(255, 255, 255, 255), false));
+    public ColorSetting color = sgGeneral.add(new ColorSetting("filtro", "filtro de color", new Color(255, 255, 255, 255), false));
 
     public Fullbright() {
         super("brilli brilli",

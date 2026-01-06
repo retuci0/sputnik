@@ -1,7 +1,7 @@
 package me.retucio.sputnik.event.events.sputnik;
 
 import me.retucio.sputnik.event.Event;
-import me.retucio.sputnik.module.settings.Setting;
+import me.retucio.sputnik.module.setting.Setting;
 
 // se genera cada que se cambia el valor de un ajuste
 public class UpdateSettingEvent extends Event {

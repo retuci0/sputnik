@@ -2,11 +2,11 @@ package me.retucio.sputnik.module.modules.player;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 
 public class Headhitters extends Module {
 
-    public NumberSetting delay = addSetting(new NumberSetting("delay", "delay de saltos", 0, 0, 20, 1));
+    public NumberSetting delay = sgGeneral.add(new NumberSetting("delay", "delay de saltos", 0, 0, 20, 1));
 
     public Headhitters() {
         super("headhitters",

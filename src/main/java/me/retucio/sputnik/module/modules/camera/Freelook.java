@@ -2,8 +2,8 @@ package me.retucio.sputnik.module.modules.camera;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.EnumSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.KeyUtil;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.util.math.MathHelper;
@@ -16,13 +16,13 @@ import org.lwjgl.glfw.GLFW;
 
 public class Freelook extends Module {
 
-    public EnumSetting<CameraMode> mode = addSetting(new EnumSetting<>("cámara a mover", "elige cual cámara mover con el ratón y cuál se queda estática",
+    public EnumSetting<CameraMode> mode = sgGeneral.add(new EnumSetting<>("cámara a mover", "elige cual cámara mover con el ratón y cuál se queda estática",
             CameraMode.class, CameraMode.CAMERA));
 
-    public NumberSetting arrowSens = addSetting(new NumberSetting("sensibilidad de las flechas", "cuánto rotan la cámara estática las flechas (0 para desactivar)",
+    public NumberSetting arrowSens = sgGeneral.add(new NumberSetting("sensibilidad de las flechas", "cuánto rotan la cámara estática las flechas (0 para desactivar)",
             4, 0, 10, 0.1));
 
-    public NumberSetting mouseSens = addSetting(new NumberSetting("sensibilidad del ratón", ".",
+    public NumberSetting mouseSens = sgGeneral.add(new NumberSetting("sensibilidad del ratón", ".",
             0.1, 0, 2, 0.05));
 
     private float yaw;

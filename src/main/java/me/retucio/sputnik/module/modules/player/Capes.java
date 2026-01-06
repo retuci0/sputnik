@@ -4,11 +4,11 @@ import me.retucio.sputnik.cape.Cape;
 import me.retucio.sputnik.cape.CapeManager;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.OptionSetting;
+import me.retucio.sputnik.module.setting.settings.OptionSetting;
 
 public class Capes extends Module {
 
-    public OptionSetting<Cape> cape = addSetting(new OptionSetting<>("capa", "qué capa llevar puesta",
+    public OptionSetting<Cape> cape = sgGeneral.add(new OptionSetting<>("capa", "qué capa llevar puesta",
             CapeManager.INSTANCE.getCapes(), CapeManager.INSTANCE.getCape("hollow-knight")));
 
     public Capes() {

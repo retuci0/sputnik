@@ -4,7 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.retucio.sputnik.command.Command;
 import me.retucio.sputnik.command.args.ModuleArgumentType;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.KeySetting;
+import me.retucio.sputnik.module.setting.settings.KeySetting;
 import me.retucio.sputnik.util.ChatUtil;
 import me.retucio.sputnik.util.KeyUtil;
 import net.minecraft.command.CommandSource;

@@ -4,12 +4,12 @@ import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.PacketEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.StringSetting;
+import me.retucio.sputnik.module.setting.settings.StringSetting;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 
 public class ColoredSigns extends Module {
 
-    public StringSetting symbol = addSetting(new StringSetting("símbolo", "símbolo a reemplazar por \"§\"", "&", 5));
+    public StringSetting symbol = sgGeneral.add(new StringSetting("símbolo", "símbolo a reemplazar por \"§\"", "&", 5));
 
     public ColoredSigns() {
         super("carteles gays",

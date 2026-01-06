@@ -2,9 +2,10 @@ package me.retucio.sputnik.module.modules.render;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.EnumSetting;
-import me.retucio.sputnik.module.settings.ListSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.ListSetting;
 import me.retucio.sputnik.util.Lists;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.util.Formatting;
@@ -24,35 +25,41 @@ import net.minecraft.util.Formatting;
 
 public class NoRender extends Module {
 
-    public BooleanSetting spyglassOverlay = addSetting(new BooleanSetting("catalejo", "renderizar overlay del catalejo", false));
-    public BooleanSetting fluidOverlay = addSetting(new BooleanSetting("fluídos", "renderizar fluídos sobre la cámara como el agua, lava o nieve en polvo (aunque no sea un fluído)", false));
-    public BooleanSetting pumpkinOverlay = addSetting(new BooleanSetting("calabaza", "renderiza el overlay de la calabaza tallada", false));
-    public BooleanSetting fireOverlay = addSetting(new BooleanSetting("fuego", "renderizar llamas sobre la cámara", false));
-    public BooleanSetting portalOverlay = addSetting(new BooleanSetting("portal", "renderizar el overlay del portal del nether", false));
+    SettingGroup sgOverlays = addSg(new SettingGroup("overlays", true));
+    SettingGroup sgAmbient = addSg(new SettingGroup("ambiente", true));
+    SettingGroup sgEffects = addSg(new SettingGroup("efectos", true));
+    SettingGroup sgUi = addSg(new SettingGroup("interfaz", true));
+    SettingGroup sgText = addSg(new SettingGroup("texto", true));
+    SettingGroup sgMisc = addSg(new SettingGroup("misc.", true));
 
-    public BooleanSetting rain = addSetting(new BooleanSetting("lluvia", "l l u v i a", true));
-    public BooleanSetting snow = addSetting(new BooleanSetting("nieve", "n i e v e", true));
-    public BooleanSetting endFlashes = addSetting(new BooleanSetting("flashes del end", "renderizar los recientemente añadidos flashes en el end", true));
+    public BooleanSetting spyglassOverlay = sgOverlays.add(new BooleanSetting("catalejo", "renderizar overlay del catalejo", false));
+    public BooleanSetting fluidOverlay = sgOverlays.add(new BooleanSetting("fluídos", "renderizar fluídos sobre la cámara como el agua, lava o nieve en polvo (aunque no sea un fluído)", false));
+    public BooleanSetting pumpkinOverlay = sgOverlays.add(new BooleanSetting("calabaza", "renderiza el overlay de la calabaza tallada", false));
+    public BooleanSetting fireOverlay = sgOverlays.add(new BooleanSetting("fuego", "renderizar llamas sobre la cámara", false));
+    public BooleanSetting portalOverlay = sgOverlays.add(new BooleanSetting("portal", "renderizar el overlay del portal del nether", false));
 
-    public ListSetting<ParticleType<?>> particles = addSetting(new ListSetting<>("partículas", "lista de partículas que se renderizan",
+    public BooleanSetting rain = sgAmbient.add(new BooleanSetting("lluvia", "l l u v i a", true));
+    public BooleanSetting snow = sgAmbient.add(new BooleanSetting("nieve", "n i e v e", true));
+    public BooleanSetting endFlashes = sgAmbient.add(new BooleanSetting("flashes del end", "renderizar los recientemente añadidos flashes en el end", true));
+    public ListSetting<ParticleType<?>> particles = sgAmbient.add(new ListSetting<>("partículas", "lista de partículas que se renderizan",
             Lists.particleList, Lists.allTrue(Lists.particleList), Lists.particleNames));
 
-    public BooleanSetting nauseaEffect = addSetting(new BooleanSetting("náusea", "renderizar borrachera", false));
-    public BooleanSetting blindnessEffect = addSetting(new BooleanSetting("ceguera", "renderizar miopía", false));
-    public BooleanSetting darknessEffect = addSetting(new BooleanSetting("oscuridad", "renderizar miedo a la oscuridad", false));
+    public BooleanSetting nauseaEffect = sgEffects.add(new BooleanSetting("náusea", "renderizar borrachera", false));
+    public BooleanSetting blindnessEffect = sgEffects.add(new BooleanSetting("ceguera", "renderizar miopía", false));
+    public BooleanSetting darknessEffect = sgEffects.add(new BooleanSetting("oscuridad", "renderizar miedo a la oscuridad", false));
 
-    public BooleanSetting scoreboard = addSetting(new BooleanSetting("marcador", "mostrar marcador a la derecha", false));
-    public BooleanSetting titles = addSetting(new BooleanSetting("títulos", "mostrar títulos (del comando /title)", false));
-    public BooleanSetting totemPop = addSetting(new BooleanSetting("tótem", "renderizar el pop del tótem", true));
+    public BooleanSetting scoreboard = sgUi.add(new BooleanSetting("marcador", "mostrar marcador a la derecha", false));
+    public BooleanSetting titles = sgUi.add(new BooleanSetting("títulos", "mostrar títulos (del comando /title)", false));
+    public BooleanSetting totemPop = sgUi.add(new BooleanSetting("tótem", "renderizar el pop del tótem", true));
 
-    public BooleanSetting stuckArrows = addSetting(new BooleanSetting("flechas clavadas", "renderizar flechas clavadas en jugadores", false));
-
-    public BooleanSetting bold = addSetting(new BooleanSetting("negrita", "letra pero §lgorda", true));
+    public BooleanSetting bold = sgText.add(new BooleanSetting("negrita", "letra pero §lgorda", true));
 //    public BooleanSetting italics = addSetting(new BooleanSetting("cursiva", "letra pero §otorcida", true));
-    public BooleanSetting underlined = addSetting(new BooleanSetting("subrayado", "letra pero §nen el suelo", true));
-    public BooleanSetting strikethrough = addSetting(new BooleanSetting("tachado", "letra pero §mdiscriminada", true));
-    public EnumSetting<Colors> color = addSetting(new EnumSetting<>("colores", "§co§4r§6g§eu§al§2l§9o §1g§5a§dy", Colors.class, Colors.DEFAULT));
-    public BooleanSetting scrambledText = addSetting(new BooleanSetting("garabato", "engarabatar texto (o como se diga) (§kasí§r)", false));
+    public BooleanSetting underlined = sgText.add(new BooleanSetting("subrayado", "letra pero §nen el suelo", true));
+    public BooleanSetting strikethrough = sgText.add(new BooleanSetting("tachado", "letra pero §mdiscriminada", true));
+    public EnumSetting<Colors> color = sgText.add(new EnumSetting<>("colores", "§co§4r§6g§eu§al§2l§9o §1g§5a§dy", Colors.class, Colors.DEFAULT));
+    public BooleanSetting scrambledText = sgText.add(new BooleanSetting("garabato", "engarabatar texto (o como se diga) (§kasí§r)", false));
+
+    public BooleanSetting stuckArrows = sgMisc.add(new BooleanSetting("flechas clavadas", "renderizar flechas clavadas en jugadores", false));
 
     public NoRender() {
         super("no render",

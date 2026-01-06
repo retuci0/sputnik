@@ -3,6 +3,7 @@ package me.retucio.sputnik.ui.widgets.frames.settings;
 import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.events.sputnik.GUISettingsFrameEvent;
 import me.retucio.sputnik.module.modules.client.GUI;
+import me.retucio.sputnik.module.setting.SettingGroup;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.ui.widgets.buttons.SettingButton;
@@ -24,6 +25,13 @@ public class ClientSettingsFrame extends SettingsFrame {
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
         updateWidth();
+
+        // botones, fondo, etc.
+        if (extended) {
+            super.render(ctx, mouseX, mouseY, delta);
+        }
+
+        // cabezal
         ctx.fill(x, renderY, x + w, renderY + h, Colors.mainColor.getRGB());
 
         ctx.drawText(mc.textRenderer, title,
@@ -36,25 +44,6 @@ public class ClientSettingsFrame extends SettingsFrame {
                 renderY + (h / 2) - (mc.textRenderer.fontHeight / 2),
                 -1, true);
 
-        List<SettingButton<?>> visibleButtons = buttons.stream()
-                .filter(sb -> sb.getSetting().isVisible() && sb.getSetting().isSearchMatch())
-                .toList();
-
-        if (extended) {
-            int currentY = renderY + h + 3;
-            totalHeight = visibleButtons.size() * h;
-            ctx.fill(x, currentY - 2, x + w, currentY + totalHeight, Colors.frameBGColor.getRGB());
-
-            for (SettingButton<?> sb : visibleButtons) {
-                sb.setX(x + 4);
-                sb.setY(currentY);
-                sb.setW(w - 8);
-                sb.setH(h - h / 4);
-                sb.render(ctx, mouseX, mouseY, delta);
-                sb.drawTooltip(ctx, mouseX, mouseY);
-                currentY += h;
-            }
-        } else totalHeight = 0;
     }
 
     @Override
@@ -70,9 +59,21 @@ public class ClientSettingsFrame extends SettingsFrame {
             }
         }
 
-        if (!extended) return;  // solo dejar clicar en los módulos si el marco está extendido
-        for (SettingButton<?> settingButton : buttons)
-            settingButton.mouseClicked(mouseX, mouseY, button);
+        // solo dejar clicar en los ajustes si el marco está extendido
+        if (!extended) return;
+
+        for (int i = 0; i < settingGroups.size(); i++) {
+            SettingGroup group = settingGroups.get(i);
+            if (hasVisibleSettingsInGroup(group) && isGroupHeaderHovered(mouseX, mouseY, i)) {
+                group.setExtended(!group.isExtended());
+                updateVisibleButtonsForGroup(group);
+                return;
+            }
+        }
+
+        for (SettingButton<?> sb : buttons) {
+            sb.mouseClicked(mouseX, mouseY, button);
+        }
     }
 
     @Override

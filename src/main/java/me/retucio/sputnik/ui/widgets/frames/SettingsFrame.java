@@ -3,7 +3,8 @@ package me.retucio.sputnik.ui.widgets.frames;
 import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.events.sputnik.SettingsFrameEvent;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.*;
+import me.retucio.sputnik.module.setting.*;
+import me.retucio.sputnik.module.setting.settings.*;
 import me.retucio.sputnik.ui.widgets.buttons.settings.*;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.ui.widgets.buttons.*;
@@ -20,19 +21,16 @@ import java.util.List;
 // marco para los botones de los ajustes de cada módulo
 public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
 
-    public Module module;
+    private Module module;
+    protected List<SettingGroup> settingGroups;
+    private static final int PADDING = 4; // para ser consistente
 
     public SettingsFrame(Module module, int x, int y, int w, int h) {
         super("ajustes de " + module.getName(), x, y, w, h);
         this.module = module;
+        this.settingGroups = module.getSgs();
 
-        // asegurarse de que no se sale de la pantalla
-        if (mc.getWindow() != null) {
-            this.x = Math.clamp(this.x, 0, mc.getWindow().getScaledWidth() - w);
-            this.y = Math.clamp(this.y, 0, mc.getWindow().getScaledHeight() - totalHeight - h);
-        }
-
-        addButtons();
+        addButtonsByGroups();
 
         visibleButtons = buttons.stream()
                 .filter(sb -> sb.getSetting().isVisible())
@@ -46,7 +44,7 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
         // cabezal
         int centerX = x + w / 2;
         int centerY = renderY + h / 2;
-        int titleX = x + 8;
+        int titleX = x + 2 * PADDING;
         int titleY = centerY - mc.textRenderer.fontHeight / 2;
 
         int headerColor = module.isEnabled()
@@ -57,47 +55,102 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
                 ? Color.RED.getRGB()
                 : -1;
 
-        if (!module.shouldSaveSettings()) headerColor = (int) module.getSettings().stream().filter(s -> ((BooleanSetting) s).isEnabled()).count() > 0
-                ? Colors.enabledToggleButtonColor.getRGB()
-                : Colors.disabledToggleButtonColor.getRGB();
-
         ctx.fill(x, renderY, x + w, renderY + h, headerColor);
         ctx.drawText(mc.textRenderer, title, titleX, titleY, -1, true);
-        ctx.drawText(mc.textRenderer, "×", x + w - mc.textRenderer.getWidth("×") - 8, titleY, closeButtonColor, true);
+        ctx.drawText(mc.textRenderer, "×", x + w - mc.textRenderer.getWidth("×") - 2 * PADDING, titleY, closeButtonColor, true);
 
+        // filtrar botones visibles
         visibleButtons = buttons.stream()
                 .filter(sb -> sb.getSetting().isVisible() && sb.getSetting().isSearchMatch())
                 .toList();
 
         // descripción
-        List<String> descLines = wrapDescription(module.getDescription(), w - 8);
+        List<String> descLines = wrapDescription(module.getDescription(), w - 2 * PADDING);
         int lineSpacing = 2;
 
         int descHeight = descLines.size() * mc.textRenderer.fontHeight + (descLines.size() - 1) * lineSpacing;
-        int descBoxTop = renderY + h + 5;
-        int descBoxBottom = descBoxTop + descHeight + 8;
+        int descBoxTop = renderY + h + PADDING;
+        int descBoxBottom = descBoxTop + descHeight + PADDING * 2;
 
-        totalHeight = descHeight + 8 + h * visibleButtons.size() + 4;
+        totalHeight = descHeight + 3 * PADDING;
+        int currentY;
 
-        ctx.fill(x, descBoxTop - 4, x + w, descBoxTop + totalHeight, Colors.frameBGColor.getRGB());
-        ctx.fill(x + 4, descBoxTop, x + w - 4, descBoxBottom, Colors.buttonColor.getRGB());
+        // obtener valores de altura y tal
+        for (SettingGroup group : settingGroups) {
+            if (hasVisibleSettingsInGroup(group)) {
+                totalHeight += h + PADDING;
 
+                if (group.isExtended()) {
+                    List<SettingButton<?>> groupButtons = getButtonsForGroup(group);
+                    for (int j = 0; j < groupButtons.size(); j++) {
+                        SettingButton<?> sb = groupButtons.get(j);
+                        if (sb.getSetting().isVisible() && sb.getSetting().isSearchMatch()) {
+                            if (j < groupButtons.size() - 1) {
+                                totalHeight += (h - h / 4) + PADDING;
+                            } else {
+                                totalHeight += (h - h / 4);
+                            }
+                        }
+                    }
+                    totalHeight += PADDING;
+                }
+            }
+        }
+
+        // fondo del marco
+        ctx.fill(x, descBoxTop - PADDING + 1, x + w, descBoxTop + totalHeight, Colors.frameBGColor.getRGB());
+
+        // fondo de la descripción
+        ctx.fill(x + PADDING, descBoxTop, x + w - PADDING, descBoxBottom, Colors.buttonColor.getRGB());
+
+        // restablecer currentY
+        currentY = descBoxBottom + PADDING;
+
+        // dibujar botones y cabezales
+        for (int i = 0; i < settingGroups.size(); i++) {
+            SettingGroup group = settingGroups.get(i);
+            if (hasVisibleSettingsInGroup(group)) {
+                int groupHeaderColor = isGroupHeaderHovered(mouseX, mouseY, i)
+                        ? Colors.buttonColor.brighter().getRGB()
+                        : Colors.buttonColor.getRGB();
+
+                ctx.fill(x + PADDING, currentY, x + w - PADDING, currentY + h, groupHeaderColor);
+                ctx.drawText(mc.textRenderer, group.getName(), x + PADDING * 2, currentY + (h - mc.textRenderer.fontHeight) / 2, -1, true);
+                ctx.drawText(mc.textRenderer, group.isExtended() ? "-" : "+", x + w - 4 * PADDING, currentY + (h - mc.textRenderer.fontHeight) / 2, -1, true);
+
+                currentY += h + PADDING;
+
+                // ajustes de grupos extendidos
+                if (group.isExtended()) {
+                    List<SettingButton<?>> groupButtons = getButtonsForGroup(group);
+                    for (int j = 0; j < groupButtons.size(); j++) {
+                        SettingButton<?> sb = groupButtons.get(j);
+                        if (sb.getSetting().isVisible() && sb.getSetting().isSearchMatch()) {
+                            sb.setX(x + PADDING * 2);
+                            sb.setY(currentY);
+                            sb.setW(w - PADDING * 4);
+                            sb.setH(h - h / 4);
+                            sb.render(ctx, mouseX, mouseY, delta);
+
+                            if (j < groupButtons.size() - 1) {
+                                currentY += (h - h / 4) + PADDING;
+                            } else {
+                                currentY += (h - h / 4);
+                            }
+                        }
+                    }
+                    currentY += PADDING;
+                }
+            }
+        }
+
+        // texto de la desc.
         int firstLineY = descBoxTop + ((descBoxBottom - descBoxTop) - descHeight) / 2;
         for (int i = 0; i < descLines.size(); i++) {
             String line = descLines.get(i);
             int lineX = centerX - mc.textRenderer.getWidth(line) / 2;
             int lineY = firstLineY + i * (mc.textRenderer.fontHeight + lineSpacing);
             ctx.drawText(mc.textRenderer, line, lineX, lineY, -1, true);
-        }
-
-        int startButtonY = firstLineY - descBoxTop + descBoxBottom;
-        for (SettingButton<?> sb : visibleButtons) {
-            sb.setX(x + 4);
-            sb.setY(startButtonY);
-            sb.setW(w - 8);
-            sb.setH(h - h / 4);
-            sb.render(ctx, mouseX, mouseY, delta);
-            startButtonY += h;
         }
     }
 
@@ -113,7 +166,8 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
             if (isCloseButtonHovered(mouseX, mouseY)) {
                 ClickGUI.INSTANCE.closeSettingsFrame(this.module);
                 return;
-            } if (button == 0) {
+            }
+            if (button == 0) {
                 dragging = true;
                 dragX = mouseX - x;
                 dragY = mouseY - y;
@@ -122,8 +176,19 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
             }
         }
 
-        for (SettingButton<?> sb : visibleButtons)
+        // al hacer clic en los cabezales de los grupos de ajustes
+        for (int i = 0; i < settingGroups.size(); i++) {
+            SettingGroup group = settingGroups.get(i);
+            if (hasVisibleSettingsInGroup(group) && isGroupHeaderHovered(mouseX, mouseY, i)) {
+                group.setExtended(!group.isExtended());
+                updateVisibleButtonsForGroup(group);
+                return;
+            }
+        }
+
+        for (SettingButton<?> sb : visibleButtons) {
             sb.mouseClicked(mouseX, mouseY, button);
+        }
     }
 
     @Override
@@ -132,8 +197,9 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
         if (button == 0) {
             dragging = false;
 
-            if (isHovered(mouseX, mouseY))
+            if (isHovered(mouseX, mouseY)) {
                 Sputnik.EVENT_BUS.post(new SettingsFrameEvent.Move(this));
+            }
         }
 
         for (SettingButton<?> sb : visibleButtons)
@@ -166,6 +232,12 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
             int textWidth = mc.textRenderer.getWidth(text);
             maxWidth = Math.max(maxWidth, textWidth);
         }
+
+        for (SettingGroup group : settingGroups) {
+            int groupTextWidth = mc.textRenderer.getWidth("▶ " + group.getName());
+            maxWidth = Math.max(maxWidth, groupTextWidth);
+        }
+
         this.w = maxWidth + 30;
     }
 
@@ -176,6 +248,109 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
         }
     }
 
+    public int getGroupHeaderY(int groupIndex) {
+        int currentY = renderY + h + PADDING;
+        List<String> descLines = wrapDescription(module.getDescription(), w - 2 * PADDING);
+        int descHeight = descLines.size() * mc.textRenderer.fontHeight + (descLines.size() - 1) * 2;
+        currentY += descHeight + 3 * PADDING; // descBoxBottom + padding
+
+        // iterar hasta llegar al grupo deseado
+        int currentIndex = 0;
+        for (SettingGroup group : settingGroups) {
+            if (hasVisibleSettingsInGroup(group)) {
+                if (currentIndex == groupIndex) {
+                    return currentY;
+                }
+
+                currentY += h + PADDING;
+
+                if (group.isExtended()) {
+                    List<SettingButton<?>> groupButtons = getButtonsForGroup(group);
+                    for (int j = 0; j < groupButtons.size(); j++) {
+                        SettingButton<?> sb = groupButtons.get(j);
+                        if (sb.getSetting().isVisible() && sb.getSetting().isSearchMatch()) {
+                            if (j < groupButtons.size() - 1) {
+                                currentY += (h - h / 4) + PADDING;
+                            } else {
+                                currentY += (h - h / 4);
+                            }
+                        }
+                    }
+                    currentY += PADDING;
+                }
+                currentIndex++;
+            }
+        }  // fallback
+        return currentY;
+    }
+
+    public boolean isGroupHeaderHovered(int mouseX, int mouseY, int groupIndex) {
+        int headerY = getGroupHeaderY(groupIndex);
+
+        return mouseX > x + PADDING && mouseX < x + w - PADDING &&
+                mouseY > headerY && mouseY < headerY + h;
+    }
+
+    private void addButtonsByGroups() {
+        int offset = h;
+
+        for (SettingGroup group : settingGroups) {
+            for (Setting setting : group) {
+                SettingButton<?> button = createSettingButton(setting, offset);
+                if (button != null) {
+                    addButton(button);
+                    offset += button.getH() + PADDING;
+                }
+            }
+        }
+    }
+
+    private SettingButton<?> createSettingButton(Setting setting, int offset) {
+        return switch (setting) {
+            case BooleanSetting b -> new ToggleButton(b, this, offset);
+            case NumberSetting n -> new SliderButton(n, this, offset);
+            case EnumSetting<?> e -> new CycleButton<>(e, this, offset);
+            case KeySetting k -> new BindButton(k, this, offset);
+            case StringSetting s -> new TextButton(s, this, offset);
+            case ListSetting<?> l -> new ListButton<>(l, this, offset);
+            case ColorSetting c -> new ColorButton(c, this, offset);
+            case OptionSetting<?> o -> new ChooseButton<>(o, this, offset);
+            default -> null;
+        };
+    }
+
+    protected boolean hasVisibleSettingsInGroup(SettingGroup group) {
+        for (Setting setting : group) {
+            if (setting.isVisible()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<SettingButton<?>> getButtonsForGroup(SettingGroup group) {
+        List<SettingButton<?>> groupButtons = new ArrayList<>();
+        for (SettingButton<?> button : buttons) {
+            for (Setting setting : group) {
+                if (setting == button.getSetting()) {
+                    groupButtons.add(button);
+                    break;
+                }
+            }
+        }
+        return groupButtons;
+    }
+
+    protected void updateVisibleButtonsForGroup(SettingGroup group) {
+        visibleButtons = new ArrayList<>();
+        for (SettingGroup sg : settingGroups) {
+            if (sg.isExtended()) {
+                visibleButtons.addAll(getButtonsForGroup(sg).stream()
+                        .filter(sb -> sb.getSetting().isVisible() && sb.getSetting().isSearchMatch())
+                        .toList());
+            }
+        }
+    }
 
     private List<String> wrapDescription(String text, int maxWidth) {
         List<String> lines = new ArrayList<>();
@@ -186,7 +361,7 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
 
         for (String word : words) {
             String testLine = line.isEmpty() ? word : line + " " + word;
-            if (mc.textRenderer.getWidth(testLine) > maxWidth - 8) { // padding of 4 each side
+            if (mc.textRenderer.getWidth(testLine) > maxWidth - 2 * PADDING) {
                 if (!line.isEmpty()) lines.add(line.toString());
                 line = new StringBuilder(word);
             } else {
@@ -197,56 +372,29 @@ public class SettingsFrame extends Frame<SettingButton<? extends Setting>> {
         return lines;
     }
 
-    private void addButtons() {
-        int offset = h;
-
-        for (Setting setting : module.getSettings()) {
-            switch (setting) {
-                case BooleanSetting b -> {
-                    addButton(new ToggleButton(b, this, offset));
-                    offset += 18;
-                }
-                case NumberSetting n -> {
-                    addButton(new SliderButton(n, this, offset));
-                    offset += 18;
-                }
-                case EnumSetting<?> e -> {
-                    addButton(new CycleButton<>(e, this, offset));
-                    offset += 18;
-                }
-                case KeySetting k -> {
-                    addButton(new BindButton(k, this, offset));
-                    offset += 18;
-                }
-                case StringSetting s -> {
-                    addButton(new TextButton(s, this, offset));
-                    offset += 18;
-                }
-                case ListSetting<?> l -> {
-                    addButton(new ListButton<>(l, this, offset));
-                    offset += 18;
-                }
-                case ColorSetting c -> {
-                    addButton(new ColorButton(c, this, offset));
-                    offset += 18;
-                }
-                case OptionSetting<?> o -> {
-                    addButton(new ChooseButton<>(o, this, offset));
-                    offset += 18;
-                }
-                default -> {
-                }
-            }
-        }
-    }
-
     public void addButton(SettingButton<?> button) {
         buttons.add(button);
         updateWidth();  // actualizar anchura del frame tras cada iteración
     }
 
     protected boolean isCloseButtonHovered(double mouseX, double mouseY) {
-        return mouseX > x + w - mc.textRenderer.getWidth("×") - 12 && mouseX < x + w - 4
-                && mouseY > renderY + 4 && mouseY < renderY + h - 4;
+        return mouseX > x + w - mc.textRenderer.getWidth("×") - 3 * PADDING && mouseX < x + w - PADDING
+                && mouseY > renderY + PADDING && mouseY < renderY + h - PADDING;
+    }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
+    }
+
+    public List<SettingGroup> getSettingGroups() {
+        return settingGroups;
+    }
+
+    public void setSettingGroups(List<SettingGroup> settingGroups) {
+        this.settingGroups = settingGroups;
     }
 }

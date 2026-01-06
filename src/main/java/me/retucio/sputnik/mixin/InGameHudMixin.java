@@ -1,6 +1,8 @@
 package me.retucio.sputnik.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import me.retucio.sputnik.Sputnik;
+import me.retucio.sputnik.event.events.Render2DEvent;
 import me.retucio.sputnik.module.ModuleManager;
 import me.retucio.sputnik.module.modules.misc.ChatPlus;
 import me.retucio.sputnik.module.modules.camera.Freecam;
@@ -26,6 +28,11 @@ public abstract class InGameHudMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void getModules(MinecraftClient client, CallbackInfo ci) {
         noRender = ModuleManager.INSTANCE.getModuleByClass(NoRender.class);
+    }
+
+    @Inject(method = "render", at = @At("TAIL"))
+    private void onRenderHud(DrawContext ctx, RenderTickCounter tc, CallbackInfo ci) {
+        Sputnik.EVENT_BUS.post(new Render2DEvent(ctx, tc));
     }
 
 

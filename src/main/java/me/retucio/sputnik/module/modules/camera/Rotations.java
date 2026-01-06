@@ -4,17 +4,17 @@ import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.ChangeRotationEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class Rotations extends Module {
 
-    public NumberSetting yaw = addSetting(new NumberSetting("guiñada", "eje vertical - giro horizontal (yaw)", 0, -180, 180, 1));
-    public NumberSetting pitch = addSetting(new NumberSetting("cabeceo", "eje horizontal - giro vertical (pitch)", 0, -90, 90, 1));
+    public NumberSetting yaw = sgGeneral.add(new NumberSetting("guiñada", "eje vertical - giro horizontal (yaw)", 0, -180, 180, 1));
+    public NumberSetting pitch = sgGeneral.add(new NumberSetting("cabeceo", "eje horizontal - giro vertical (pitch)", 0, -90, 90, 1));
 
-    public BooleanSetting smooth = addSetting(new BooleanSetting("evitar movimiento", "cancela todo movimiento de la cámara", false));
-    public BooleanSetting serverSide = addSetting(new BooleanSetting("serverside", "espamea paquetes de rotación al servidor", false));
+    public BooleanSetting smooth = sgGeneral.add(new BooleanSetting("evitar movimiento", "cancela todo movimiento de la cámara", false));
+    public BooleanSetting serverSide = sgGeneral.add(new BooleanSetting("serverside", "espamea paquetes de rotación al servidor", false));
 
     public Rotations() {
         super("rotaciones",

@@ -4,20 +4,24 @@ import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.PacketEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.EnumSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 
 // continúa en ClientWorldPropertiesMixin, DimensionTypeMixin,
 public class TimeChanger extends Module {
 
-    public BooleanSetting renderSun = addSetting(new BooleanSetting("sol", "que haya sol o no", true));
-    public BooleanSetting renderMoon = addSetting(new BooleanSetting("luna", "que haya luna o no", true));
-    public BooleanSetting renderStars = addSetting(new BooleanSetting("estrellas", "que hayan estrellas o no", true));
+    SettingGroup sgCelestialBodies = addSg(new SettingGroup("cuerpos celeste", false));
 
-    public EnumSetting<MoonPhases> moonPhase = addSetting(new EnumSetting<>("fase lunar", "fase lunar actual", MoonPhases.class, MoonPhases.DEFAULT));
-    public NumberSetting time = addSetting(new NumberSetting("hora", "hora del juego", 0, -20000, 20000, 1));
+    public NumberSetting time = sgGeneral.add(new NumberSetting("hora", "hora del juego", 0, -20000, 20000, 1));
+
+    public BooleanSetting renderSun = sgCelestialBodies.add(new BooleanSetting("sol", "que haya sol o no", true));
+    public BooleanSetting renderMoon = sgCelestialBodies.add(new BooleanSetting("luna", "que haya luna o no", true));
+    public BooleanSetting renderStars = sgCelestialBodies.add(new BooleanSetting("estrellas", "que hayan estrellas o no", true));
+
+    public EnumSetting<MoonPhases> moonPhase = sgCelestialBodies.add(new EnumSetting<>("fase lunar", "fase lunar actual", MoonPhases.class, MoonPhases.DEFAULT));
 
     public TimeChanger() {
         super("cielo custom",

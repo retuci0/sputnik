@@ -10,8 +10,9 @@ import me.retucio.sputnik.event.events.ReceiveMessageEvent;
 import me.retucio.sputnik.event.events.SendMessageEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.ChatUtil;
 import me.retucio.sputnik.util.interfaces.IChatHudLine;
 import me.retucio.sputnik.util.interfaces.IChatHudLineVisible;
@@ -43,15 +44,17 @@ import java.util.regex.Pattern;
 public class ChatPlus extends Module {
 
     // ajustes
-    public BooleanSetting timestamps = addSetting(new BooleanSetting("sello de tiempo", "muestra a qué hora se ha enviado un mensaje", true));
-    public BooleanSetting timestampSecs = addSetting(new BooleanSetting("mostrar segundos", "muestra segundos también en el sello de tiempo", false));
-    public BooleanSetting showHeads = addSetting(new BooleanSetting("cabezas", "muestra la cabeza del jugador junto a su mensaje", true));
-    public BooleanSetting coordsProtection = addSetting(new BooleanSetting("proteger coordenadas", "evitar enviar coordenadas por el chat", true));
+    SettingGroup sgChat = addSg(new SettingGroup("funcionamiento del chat", true));
 
-    public BooleanSetting keepHistory = addSetting(new BooleanSetting("no borrar chat", "no borrar el chat tras desconectarse", true));
-    public BooleanSetting logger = addSetting(new BooleanSetting("registro", "evita que se borre el chat de un server", true));
-    public BooleanSetting noCharLimit = addSetting(new BooleanSetting("quitar límite de caracteres", "te deja escribir mensajes tan largos como desees", false));
-    public NumberSetting chatHistoryExtraLength = addSetting(new NumberSetting("expandir chat", "cuántas líneas añadir al historial del chat",
+    public BooleanSetting timestamps = sgGeneral.add(new BooleanSetting("sello de tiempo", "muestra a qué hora se ha enviado un mensaje", true));
+    public BooleanSetting timestampSecs = sgGeneral.add(new BooleanSetting("mostrar segundos", "muestra segundos también en el sello de tiempo", false));
+    public BooleanSetting showHeads = sgGeneral.add(new BooleanSetting("cabezas", "muestra la cabeza del jugador junto a su mensaje", true));
+
+    public BooleanSetting coordsProtection = sgChat.add(new BooleanSetting("proteger coordenadas", "evitar enviar coordenadas por el chat", true));
+    public BooleanSetting keepHistory = sgChat.add(new BooleanSetting("no borrar chat", "no borrar el chat tras desconectarse", true));
+    public BooleanSetting logger = sgChat.add(new BooleanSetting("registro", "evita que se borre el chat de un server", true));
+    public BooleanSetting noCharLimit = sgChat.add(new BooleanSetting("quitar límite de caracteres", "te deja escribir mensajes tan largos como desees", false));
+    public NumberSetting chatHistoryExtraLength = sgChat.add(new NumberSetting("expandir chat", "cuántas líneas añadir al historial del chat",
             0, 0, 1000, 1));
 
     public ChatPlus()  {

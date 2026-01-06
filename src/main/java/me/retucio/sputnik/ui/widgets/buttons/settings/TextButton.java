@@ -1,6 +1,6 @@
 package me.retucio.sputnik.ui.widgets.buttons.settings;
 
-import me.retucio.sputnik.module.settings.StringSetting;
+import me.retucio.sputnik.module.setting.settings.StringSetting;
 import me.retucio.sputnik.ui.widgets.buttons.SettingButton;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;

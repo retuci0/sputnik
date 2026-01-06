@@ -2,7 +2,7 @@ package me.retucio.sputnik.config;
 
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.sputnik.*;
-import me.retucio.sputnik.module.settings.*;
+import me.retucio.sputnik.module.setting.settings.*;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 
 import java.io.Serial;
@@ -78,13 +78,13 @@ public class ClientConfig {
 
     @SubscribeEvent
     public void onCloseSettingsFrame(SettingsFrameEvent.Close event) {
-        settingsFrames.remove(event.getFrame().module.getName());
+        settingsFrames.remove(event.getFrame().getModule().getName());
         ConfigManager.save();
     }
 
     @SubscribeEvent
     public void onMoveSettingsFrame(SettingsFrameEvent.Move event) {
-        settingsFrames.replace(event.getFrame().module.getName(), new int[]{event.getFrame().getX(), event.getFrame().getY()});
+        settingsFrames.replace(event.getFrame().getModule().getName(), new int[]{event.getFrame().getX(), event.getFrame().getY()});
         ConfigManager.save();
     }
 

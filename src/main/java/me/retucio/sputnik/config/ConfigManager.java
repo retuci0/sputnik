@@ -5,20 +5,20 @@ import com.google.gson.GsonBuilder;
 import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.module.Module;
 import me.retucio.sputnik.module.ModuleManager;
-import me.retucio.sputnik.module.settings.*;
+import me.retucio.sputnik.module.setting.*;
+import me.retucio.sputnik.module.setting.settings.*;
 import me.retucio.sputnik.ui.widgets.Frame;
 import me.retucio.sputnik.ui.widgets.frames.ModuleFrame;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.ui.widgets.frames.settings.ClientSettingsFrame;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
-import me.retucio.sputnik.util.ChatUtil;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 // se ocupa de guardar, cargar y aplicar ajustes
 public class ConfigManager {
@@ -115,10 +115,10 @@ public class ConfigManager {
 
     public static void setFramePosition(SettingsFrame frame) {
         ensureConfig();
-        if (!config.settingsFrames.containsKey(frame.module.getName()))
-            config.settingsFrames.put(frame.module.getName(), new int[] {frame.getX(), frame.getY()});
+        if (!config.settingsFrames.containsKey(frame.getModule().getName()))
+            config.settingsFrames.put(frame.getModule().getName(), new int[] {frame.getX(), frame.getY()});
         else
-            config.settingsFrames.replace(frame.module.getName(), new int[] {frame.getX(), frame.getY()});
+            config.settingsFrames.replace(frame.getModule().getName(), new int[] {frame.getX(), frame.getY()});
         save();
     }
 
@@ -138,17 +138,6 @@ public class ConfigManager {
         ensureConfig();
         config.hudVisibilities.put(id, visible);
         save();
-    }
-
-    public static void setHudImagePath(String id, String imagePath) {
-        ensureConfig();
-        config.hudImagePaths.put(id, imagePath);
-        save();
-    }
-
-    public static String getHudImagePath(String id) {
-        ensureConfig();
-        return config.hudImagePaths.getOrDefault(id, "");
     }
 
     public static void setSearchBarPosition(int x, int y) {
@@ -248,6 +237,7 @@ public class ConfigManager {
         }
     }
 
+
     // ajustes de módulos
 
     private static void applyBooleanSetting(BooleanSetting setting, Object value) {
@@ -306,8 +296,14 @@ public class ConfigManager {
         Number b = (Number) map.get("b");
         Number a = (Number) map.get("a");
 
-        if (r != null && g != null && b != null && a != null)
-            setting.setRGB(r.intValue(), g.intValue(), b.intValue(), a.intValue());
+        if (r != null && g != null && b != null && a != null) {
+            setting.setRGB(
+                    r.intValue(),
+                    g.intValue(),
+                    b.intValue(),
+                    a.intValue()
+            );
+        }
 
         applyOptionalProperty(map, "rb", Boolean.class, setting::setRainbow);
         applyOptionalProperty(map, "rs", Number.class, val -> setting.setRainbowSpeed(val.intValue()));
@@ -321,7 +317,7 @@ public class ConfigManager {
         }
     }
 
-    private static <T> void applyOptionalProperty(Map<?, ?> map, String key, Class<T> type, java.util.function.Consumer<T> setter) {
+    private static <T> void applyOptionalProperty(Map<?, ?> map, String key, Class<T> type, Consumer<T> setter) {
         Object value = map.get(key);
         if (type.isInstance(value)) {
             setter.accept(type.cast(value));
@@ -340,7 +336,7 @@ public class ConfigManager {
     }
 
     private static String getSettingKey(Setting setting) {
-        return setting.getModule().getName() + ":" + setting.getName();
+        return setting.getSg().getModule().getName() + ":" + setting.getName();
     }
 
     public static boolean hasLoaded() {

@@ -1,4 +1,4 @@
-package me.retucio.sputnik.module.settings;
+package me.retucio.sputnik.module.setting;
 
 import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.events.sputnik.UpdateSettingEvent;
@@ -13,7 +13,7 @@ public abstract class Setting {
     private boolean visible = true;
     private boolean searchMatch = true;
 
-    private Module module;
+    private SettingGroup sg;
 
     protected Setting(String name, String description) {
         this.name = name;
@@ -44,15 +44,21 @@ public abstract class Setting {
         return description;
     }
 
-    public Module getModule() {
-        return module;
+    public SettingGroup getSg() {
+        return sg;
     }
 
-    public void setModule(Module module) {
-        this.module = module;
+    public void setSg(SettingGroup sg) {
+        this.sg = sg;
     }
 
     public void fireUpdateEvent() {
-        Sputnik.EVENT_BUS.post(new UpdateSettingEvent(this, module.shouldSaveSettings()));
+        Sputnik.EVENT_BUS.post(
+                new UpdateSettingEvent(
+                        this,
+                        sg.getModule()
+                                .shouldSaveSettings()
+                )
+        );
     }
 }

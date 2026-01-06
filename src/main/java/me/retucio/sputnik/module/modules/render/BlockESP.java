@@ -1,13 +1,14 @@
 package me.retucio.sputnik.module.modules.render;
 
 import me.retucio.sputnik.event.SubscribeEvent;
-import me.retucio.sputnik.event.events.RenderWorldEvent;
+import me.retucio.sputnik.event.events.Render3DEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.ColorSetting;
-import me.retucio.sputnik.module.settings.ListSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.ListSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.Colors;
 import me.retucio.sputnik.util.Lists;
 import me.retucio.sputnik.util.render.RenderUtil;
@@ -23,17 +24,20 @@ import java.util.List;
 
 public class BlockESP extends Module {
 
-    public ListSetting<Block> blocks = addSetting(new ListSetting<>("bloques", "bloques a resaltar",
+    SettingGroup sgOulines = addSg(new SettingGroup("contorno", true));
+    SettingGroup sgFilling = addSg(new SettingGroup("relleno", true));
+
+    public ListSetting<Block> blocks = sgGeneral.add(new ListSetting<>("bloques", "bloques a resaltar",
             Lists.blockList, Lists.allFalse(Lists.blockList), Lists.blockNames));
+    public NumberSetting radius = sgGeneral.add(new NumberSetting("radio", "radio de búsqueda de bloques",
+            24, 2, 128, 1));
 
-    public NumberSetting radius = addSetting(new NumberSetting("radio", "radio de búsqueda de bloques", 24, 2, 128, 1));
+    public BooleanSetting outlines = sgOulines.add(new BooleanSetting("contorno", "renderizar contorno de bloques", true));
+    public ColorSetting outlineColor = sgOulines.add(new ColorSetting("color del contorno", "color del contorno", Colors.CELESTE, false));
+    public NumberSetting lineWidth = sgOulines.add(new NumberSetting("grosor del contorno", "grosor de las líneas del contorno", 1, 1, 5, 0.2));
 
-    public BooleanSetting outlines = addSetting(new BooleanSetting("contorno", "renderizar contorno de bloques", true));
-    public ColorSetting outlineColor = addSetting(new ColorSetting("color del contorno", "color del contorno", Colors.CELESTE, false));
-    public NumberSetting lineWidth = addSetting(new NumberSetting("grosor del contorno", "grosor de las líneas del contorno", 1, 1, 5, 0.2));
-
-    public BooleanSetting fillings = addSetting(new BooleanSetting("relleno", "renderizar relleno de bloques", true));
-    public ColorSetting fillingColor = addSetting(new ColorSetting("color del relleno", "color del relleno", new Color(57, 177, 215, 67), false));
+    public BooleanSetting fillings = sgFilling.add(new BooleanSetting("relleno", "renderizar relleno de bloques", true));
+    public ColorSetting fillingColor = sgFilling.add(new ColorSetting("color del relleno", "color del relleno", new Color(57, 177, 215, 67), false));
 
 
     public BlockESP() {
@@ -50,7 +54,7 @@ public class BlockESP extends Module {
     }
 
     @SubscribeEvent
-    public void onRenderWorld(RenderWorldEvent event) {
+    public void onRenderWorld(Render3DEvent event) {
         if (mc.player == null || mc.world == null) return;
 
         for (Block block : blocks.getOptions()) {

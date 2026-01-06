@@ -3,7 +3,7 @@ package me.retucio.sputnik.module.modules.misc;
 import me.retucio.sputnik.mixin.accessor.AnvilScreenAccessor;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class AnvilFont extends Module {
 
-    public EnumSetting<FontMode> fontMode = addSetting(new EnumSetting<>("tipografía", "qué tipografía utilizar",
+    public EnumSetting<FontMode> fontMode = sgGeneral.add(new EnumSetting<>("tipografía", "qué tipografía utilizar",
             FontMode.class, FontMode.NORMAL));
 
     String text;

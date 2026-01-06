@@ -5,8 +5,8 @@ import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.PacketEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.EnumSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.ChatUtil;
 import me.retucio.sputnik.util.NetworkUtil;
 
@@ -22,10 +22,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PacketDelay extends Module {
 
-    public NumberSetting delay = addSetting(new NumberSetting("delay", "delay a añadir a los paquetes, en milisegundos", 1500, 0, 3000, 5));
-    public EnumSetting<Directions> directions = addSetting(new EnumSetting<>("dirección", "dirección de los paquetes a los que añadir delay",
+    public NumberSetting delay = sgGeneral.add(new NumberSetting("delay", "delay a añadir a los paquetes, en milisegundos", 1500, 0, 3000, 5));
+    public EnumSetting<Directions> directions = sgGeneral.add(new EnumSetting<>("dirección", "dirección de los paquetes a los que añadir delay",
             Directions.class, Directions.BOTH));
-    public EnumSetting<Packets> packets = addSetting(new EnumSetting<>("paquetes", "paquetes a los que aplicar el delay",
+    public EnumSetting<Packets> packets = sgGeneral.add(new EnumSetting<>("paquetes", "paquetes a los que aplicar el delay",
             Packets.class, Packets.ALL));
 
     private final List<DelayedPacket> delayedPackets = new CopyOnWriteArrayList<>();

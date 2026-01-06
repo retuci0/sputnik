@@ -3,7 +3,7 @@ package me.retucio.sputnik.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import me.retucio.sputnik.Sputnik;
-import me.retucio.sputnik.event.events.RenderWorldEvent;
+import me.retucio.sputnik.event.events.Render3DEvent;
 import me.retucio.sputnik.module.ModuleManager;
 import me.retucio.sputnik.module.modules.render.BlockOutline;
 import me.retucio.sputnik.module.modules.camera.Freecam;
@@ -47,7 +47,7 @@ public abstract class WorldRendererMixin {
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180f));
 
         profiler.push(Sputnik.MOD_ID + "-3d");
-        EVENT_BUS.post(new RenderWorldEvent(matrices, tickCounter, camera));
+        EVENT_BUS.post(new Render3DEvent(matrices, tickCounter, camera));
 
         profiler.pop();
         matrices.pop();

@@ -2,8 +2,8 @@ package me.retucio.sputnik.module.modules.render;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
 import me.retucio.sputnik.util.render.GlintRenderLayer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderLayers;
@@ -17,9 +17,9 @@ import net.minecraft.util.DyeColor;
 
 public class GlintPlus extends Module {
 
-    public BooleanSetting items = addSetting(new BooleanSetting("items", "modificar el destello de encantamiento de los items", true));
-    public BooleanSetting armor = addSetting(new BooleanSetting("armadura", "modificar el destello de encantamiento de la armadura", true));
-    public EnumSetting<GlintColors> glintColor = addSetting(new EnumSetting<>("colores", "color del glint", GlintColors.class, GlintColors.PURPLE));
+    public BooleanSetting items = sgGeneral.add(new BooleanSetting("items", "modificar el destello de encantamiento de los items", true));
+    public BooleanSetting armor = sgGeneral.add(new BooleanSetting("armadura", "modificar el destello de encantamiento de la armadura", true));
+    public EnumSetting<GlintColors> glintColor = sgGeneral.add(new EnumSetting<>("colores", "color del glint", GlintColors.class, GlintColors.PURPLE));
 
     public GlintPlus() {
         super("destello de enchants.",

@@ -7,7 +7,7 @@ import me.retucio.sputnik.event.events.MouseClickEvent;
 import me.retucio.sputnik.mixin.accessor.HandledScreenAccessor;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.KeySetting;
+import me.retucio.sputnik.module.setting.settings.KeySetting;
 import me.retucio.sputnik.util.InventoryUtil;
 import me.retucio.sputnik.util.KeyUtil;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -16,9 +16,9 @@ import org.lwjgl.glfw.GLFW;
 
 public class InventoryPlus extends Module {
 
-    public KeySetting row1key = addSetting(new KeySetting("fila 1", "tecla para mover items a la primera fila", GLFW.GLFW_KEY_A));
-    public KeySetting row2key = addSetting(new KeySetting("fila 2", "tecla para mover items a la segunda fila", GLFW.GLFW_KEY_S));
-    public KeySetting row3key = addSetting(new KeySetting("fila 3", "tecla para mover items a la tercera fila", GLFW.GLFW_KEY_D));
+    public KeySetting row1key = sgGeneral.add(new KeySetting("fila 1", "tecla para mover items a la primera fila", GLFW.GLFW_KEY_A));
+    public KeySetting row2key = sgGeneral.add(new KeySetting("fila 2", "tecla para mover items a la segunda fila", GLFW.GLFW_KEY_S));
+    public KeySetting row3key = sgGeneral.add(new KeySetting("fila 3", "tecla para mover items a la tercera fila", GLFW.GLFW_KEY_D));
 
     public InventoryPlus() {
         super("inventario plus",

@@ -2,7 +2,8 @@ package me.retucio.sputnik.module.modules.client;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.*;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.*;
 import me.retucio.sputnik.ui.hud.HudElement;
 import me.retucio.sputnik.ui.hud.HudRenderer;
 import me.retucio.sputnik.ui.hud.HudEditorScreen;
@@ -19,21 +20,25 @@ import java.awt.*;
 
 public class HUD extends Module {
 
+    SettingGroup sgEditor = addSg(new SettingGroup("editor", true));
+    SettingGroup sgDisplay = addSg(new SettingGroup("visualización", true));
+    SettingGroup sgElements = addSg(new SettingGroup("elementos", false));
+
     // editor
-    public KeySetting editorKey = addSetting(new KeySetting("tecla del editor", "tecla asignada al editor de elementos del hud", GLFW.GLFW_KEY_PAGE_UP));
+    public KeySetting editorKey = sgEditor.add(new KeySetting("tecla del editor", "tecla asignada al editor de elementos del hud", GLFW.GLFW_KEY_PAGE_UP));
 
     // ajustes
-    public ColorSetting color = addSetting(new ColorSetting("color", "color del texto de los elementos del HUD",
+    public ColorSetting color = sgDisplay.add(new ColorSetting("color", "color del texto de los elementos del HUD",
             new Color(255, 255, 255, 255), false));
-    public BooleanSetting showOnF3 = addSetting(new BooleanSetting("mostrar en F3", "renderizar HUD en el menú de debug", false));
-    public BooleanSetting showOnChat = addSetting(new BooleanSetting("mostrar en chat", "renderizar HUD en la pantalla del chat", false));
+    public BooleanSetting shadow = sgDisplay.add(new BooleanSetting("sombra", "texto con sombra", true));
+    public BooleanSetting showOnF3 = sgDisplay.add(new BooleanSetting("mostrar en F3", "renderizar HUD en el menú de debug", false));
+    public BooleanSetting showOnChat = sgDisplay.add(new BooleanSetting("mostrar en chat", "renderizar HUD en la pantalla del chat", false));
 
-    public BooleanSetting shadow = addSetting(new BooleanSetting("sombra", "texto con sombra", true));
-    public NumberSetting timezone = addSetting(new NumberSetting("zona horaria", "zona horaria en UTC+n", 1, -6, 6, 1));
-    public EnumSetting<TimeFormat> timeFormat = addSetting(new EnumSetting<>("formato de la hora", "12h o 24h", TimeFormat.class, TimeFormat.TWENTY_FOUR_HOUR));
-    public StringSetting customText = addSetting(new StringSetting("texto custom", "marca de agua (dejar vacío para quitar)", "adolf jitler inshtagram feishbuc twiter", 40));
-    public EnumSetting<CoordsMode> coordsMode = addSetting(new EnumSetting<>("modo de coordenadas", "qué coordenadas mostrar", CoordsMode.class, CoordsMode.OVERWORLD));
-    public EnumSetting<Dynosaurs> dyno = addSetting(new EnumSetting<>("dinosaurio", "qué dinosaurio mostrar",
+    public NumberSetting timezone = sgElements.add(new NumberSetting("zona horaria", "zona horaria en UTC+n", 1, -6, 6, 1));
+    public EnumSetting<TimeFormat> timeFormat = sgElements.add(new EnumSetting<>("formato de la hora", "12h o 24h", TimeFormat.class, TimeFormat.TWENTY_FOUR_HOUR));
+    public StringSetting customText = sgElements.add(new StringSetting("texto custom", "marca de agua (dejar vacío para quitar)", "adolf jitler inshtagram feishbuc twiter", 40));
+    public EnumSetting<CoordsMode> coordsMode = sgElements.add(new EnumSetting<>("modo de coordenadas", "qué coordenadas mostrar", CoordsMode.class, CoordsMode.OVERWORLD));
+    public EnumSetting<Dynosaurs> dyno = sgElements.add(new EnumSetting<>("dinosaurio", "qué dinosaurio mostrar",
             Dynosaurs.class, Dynosaurs.SPINOSAURUS));
 
     public HUD() {

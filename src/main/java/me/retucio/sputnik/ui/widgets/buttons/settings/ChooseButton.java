@@ -2,8 +2,8 @@ package me.retucio.sputnik.ui.widgets.buttons.settings;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.OptionSetting;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.OptionSetting;
 import me.retucio.sputnik.ui.widgets.buttons.SettingButton;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
 import me.retucio.sputnik.ui.screen.ClickGUI;
@@ -99,7 +99,7 @@ public class ChooseButton<T> extends SettingButton<OptionSetting<T>> {
                         }
                     });
 
-                    dummy.addSetting(b);
+                    dummy.getSg("general").add(b);
                     optionButtons.put(option, b);
                 });
     }

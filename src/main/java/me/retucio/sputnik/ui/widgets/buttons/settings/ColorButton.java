@@ -1,6 +1,6 @@
 package me.retucio.sputnik.ui.widgets.buttons.settings;
 
-import me.retucio.sputnik.module.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
 import me.retucio.sputnik.ui.widgets.buttons.SettingButton;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
@@ -28,6 +28,7 @@ public class ColorButton extends SettingButton<ColorSetting> {
         Color bgColor = isHovered(mouseX, mouseY)
                 ? Colors.buttonColor.brighter()
                 : Colors.buttonColor;
+
         ctx.fill(x, y, x + w, y + h, bgColor.getRGB());
 
         // prev. del color
@@ -55,7 +56,7 @@ public class ColorButton extends SettingButton<ColorSetting> {
             if (button == 0) {
                 // clic izq.: abrir selector de colores
                 ClickGUI.INSTANCE.openColorPickerFrame(
-                        setting.getModule(), setting,
+                        setting.getSg().getModule(), setting,
                         parent.getX() + parent.getW() + 120,
                         parent.getRenderY() + offset);
             } else if (button == 1 && KeyUtil.isShiftDown()) {

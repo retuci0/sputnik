@@ -5,9 +5,10 @@ import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.*;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.KeySetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.KeySetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.ChatUtil;
 import me.retucio.sputnik.util.KeyUtil;
 import me.retucio.sputnik.util.MiscUtil;
@@ -41,21 +42,22 @@ import org.lwjgl.glfw.GLFW;
 public class Freecam extends Module {
 
     // ajustes
+    SettingGroup sgSpeed = addSg(new SettingGroup("velocidad", true));
 
-    public BooleanSetting toggleOnDamage = addSetting(new BooleanSetting("desactivar al recibir daño", "desactiva el módulo tras recibir daño", true));
-    public BooleanSetting reloadChunks = addSetting(new BooleanSetting("recargar chunks", "recargar chunks para arreglar el culling de las cuevas", true));
-    public BooleanSetting renderHands = addSetting(new BooleanSetting("manos visibles", "decide si se renderizan las manos mientras la cámara esté libre", true));
-    public BooleanSetting stayCrouching = addSetting(new BooleanSetting("mantenerse agachado", "mantener al jugador agachado tras entrar en el modo de cámara libre", false));
-    public BooleanSetting staticView = addSetting(new BooleanSetting("visión estática", "desactiva ajustes que muevan la cámara", true));
-    public BooleanSetting cancelActionPackets = addSetting(new BooleanSetting("cancelar paquetes", "evita flaggear el anticheat al interactuar con bloques / entidades", true));
-    public BooleanSetting blockOutlines = addSetting(new BooleanSetting("contorno de bloques", "mostrar el contorno de los bloques estando en el modo de cámara libre", true));
+    public BooleanSetting toggleOnDamage = sgGeneral.add(new BooleanSetting("desactivar al recibir daño", "desactiva el módulo tras recibir daño", true));
+    public BooleanSetting reloadChunks = sgGeneral.add(new BooleanSetting("recargar chunks", "recargar chunks para arreglar el culling de las cuevas", true));
+    public BooleanSetting renderHands = sgGeneral.add(new BooleanSetting("manos visibles", "decide si se renderizan las manos mientras la cámara esté libre", true));
+    public BooleanSetting stayCrouching = sgGeneral.add(new BooleanSetting("mantenerse agachado", "mantener al jugador agachado tras entrar en el modo de cámara libre", false));
+    public BooleanSetting staticView = sgGeneral.add(new BooleanSetting("visión estática", "desactiva ajustes que muevan la cámara", true));
+    public BooleanSetting cancelActionPackets = sgGeneral.add(new BooleanSetting("cancelar paquetes", "evita flaggear el anticheat al interactuar con bloques / entidades", true));
+    public BooleanSetting blockOutlines = sgGeneral.add(new BooleanSetting("contorno de bloques", "mostrar el contorno de los bloques estando en el modo de cámara libre", true));
 
-    public NumberSetting speedSetting = addSetting(new NumberSetting(
+    public NumberSetting speedSetting = sgSpeed.add(new NumberSetting(
             "velocidad", "velocidad de movimiento de la cámara",
             1, 0, 10, 0.2));
 
-    public KeySetting scrollKey = addSetting(new KeySetting("tecla del scroll", "tecla a mantener pulsada para cambiar velocidad con el scroll", GLFW.GLFW_KEY_LEFT_CONTROL));
-    public NumberSetting scrollSens = addSetting(new NumberSetting(
+    public KeySetting scrollKey = sgSpeed.add(new KeySetting("tecla del scroll", "tecla a mantener pulsada para cambiar velocidad con el scroll", GLFW.GLFW_KEY_LEFT_CONTROL));
+    public NumberSetting scrollSens = sgSpeed.add(new NumberSetting(
             "sensibilidad del scroll", "sensibilidad de la rueda del ratón para modificar la velocidad, 0 para desactivar",
             1, 0, 2, 0.1));
 

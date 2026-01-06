@@ -3,7 +3,7 @@ package me.retucio.sputnik.module.modules.player;
 import me.retucio.sputnik.mixin.accessor.KeyBindingAccessor;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.ListSetting;
+import me.retucio.sputnik.module.setting.settings.ListSetting;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.util.KeyUtil;
 import me.retucio.sputnik.util.Lists;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class UIMove extends Module {
 
-    public ListSetting<ScreenHandlerType<?>> screens = addSetting(new ListSetting<>("interfaces", "interfaces en las que te podrás mover",
+    public ListSetting<ScreenHandlerType<?>> screens = sgGeneral.add(new ListSetting<>("interfaces", "interfaces en las que te podrás mover",
             Lists.screenList, Lists.allTrue(Lists.screenList), Lists.screenNames));
 
     private List<KeyBinding> movementKeys;

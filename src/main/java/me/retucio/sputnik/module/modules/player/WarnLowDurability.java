@@ -2,9 +2,10 @@ package me.retucio.sputnik.module.modules.player;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
-import me.retucio.sputnik.module.settings.OptionSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.settings.OptionSetting;
 import me.retucio.sputnik.util.ChatUtil;
 import me.retucio.sputnik.util.Lists;
 import net.minecraft.item.ItemStack;
@@ -21,16 +22,19 @@ import java.util.List;
 
 public class WarnLowDurability extends Module {
 
-    public NumberSetting limitPercentage = addSetting(new NumberSetting("porcentaje", "porcentaje de durabilidad restante a la que se te avisa",
+    SettingGroup sgWarn = addSg(new SettingGroup("aviso", true));
+    SettingGroup sgSound = addSg(new SettingGroup("sonido", true));
+
+    public NumberSetting limitPercentage = sgGeneral.add(new NumberSetting("porcentaje", "porcentaje de durabilidad restante a la que se te avisa",
             5, 1, 100, 1));
 
-    public BooleanSetting message = addSetting(new BooleanSetting("enviar mensaje", "enviar un mensaje para alertar al usuario", true));
+    public BooleanSetting message = sgWarn.add(new BooleanSetting("enviar mensaje", "enviar un mensaje para alertar al usuario", true));
+    public BooleanSetting playSound = sgWarn.add(new BooleanSetting("reproducir sonido", "reproducir un sonido para alertar al usuario", true));
 
-    public BooleanSetting playSound = addSetting(new BooleanSetting("reproducir sonido", "reproducir un sonido para alertar al usuario", true));
-    public OptionSetting<SoundEvent> sound = addSetting(new OptionSetting<>("sonido", "qué sonido reproducir",
+    public OptionSetting<SoundEvent> sound = sgSound.add(new OptionSetting<>("sonido", "qué sonido reproducir",
             Lists.soundList, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), Lists.soundNames));
-    public NumberSetting volume = addSetting(new NumberSetting("volumen", "volumen del sonido", 70, 0, 125, 1));
-    public NumberSetting pitch = addSetting(new NumberSetting("frecuencia", "altura del sonido", 70, 0, 125, 1));
+    public NumberSetting volume = sgSound.add(new NumberSetting("volumen", "volumen del sonido", 70, 0, 125, 1));
+    public NumberSetting pitch = sgSound.add(new NumberSetting("frecuencia", "altura del sonido", 70, 0, 125, 1));
 
     private final List<ItemStack> warned = new ArrayList<>();
     private float prevPercentage = -1;

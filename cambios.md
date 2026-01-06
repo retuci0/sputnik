@@ -1,18 +1,14 @@
-# v2.4
+# v2.5
 
 ## novedades
 
-ahora se usa el formato binario (.dat) en vez de .json para guardar ajustes, lo que los hace más rápidos, y el archivo más liviano
+- grupos de ajustes, para mayor orden, y arreglo de algún que otro bug
 
 ### adiciones
 
 #### módulos nuevos:
 
-- capas: cambia (solo visualmente, para ti) la capa que usas a una custom de las disponibles
-
 ### arreglos / mejoras
-
-- renombrado bien todo que lo hice con prisa
 
 ## problemas reconocidos
 

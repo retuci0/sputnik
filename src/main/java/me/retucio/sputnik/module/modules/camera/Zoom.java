@@ -5,30 +5,34 @@ import me.retucio.sputnik.event.events.GetFOVEvent;
 import me.retucio.sputnik.event.events.MouseScrollEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.KeySetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.KeySetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.KeyUtil;
 import org.lwjgl.glfw.GLFW;
 
 // continúa en GameRendererMixin
 public class Zoom extends Module {
 
-    public BooleanSetting showHands = addSetting(new BooleanSetting("mostrar manos", "esconde o muestra las manos al hacer zoom", true));
-    public BooleanSetting showHUD = addSetting(new BooleanSetting("mostrar HUD", "esconde o muestra los indicadores en pantalla", true));
+    SettingGroup sgVisual = addSg(new SettingGroup("visual", true));
+    SettingGroup sgScroll = addSg(new SettingGroup("scrolleo", true));
+    SettingGroup sgCam = addSg(new SettingGroup("cámara", true));
 
-    public NumberSetting scrollSens = addSetting(new NumberSetting("sensibilidad del scroll", "sensibilidad de la rueda del ratón (0 para desactivar)",
-            0.4, 0, 8, 0.1));
-
-    public KeySetting scrollKey = addSetting(new KeySetting("tecla del scroll", "qué tecla mantener para usar la rueda del ratón", GLFW.GLFW_KEY_LEFT_CONTROL));
-
-    public NumberSetting defaultZoom = addSetting(new NumberSetting("zoom", "cantidad de zoom",
+    public NumberSetting defaultZoom = sgGeneral.add(new NumberSetting("zoom", "cantidad de zoom",
             6, 1, 10, 0.1));
 
-    public NumberSetting mouseSensMultiplier = addSetting(new NumberSetting("sensibilidad", "multiplicador de la sensibilidad del ratón",
-            0.4, 0, 1, 0.05));
+    public BooleanSetting showHands = sgVisual.add(new BooleanSetting("mostrar manos", "esconde o muestra las manos al hacer zoom", true));
+    public BooleanSetting showHUD = sgVisual.add(new BooleanSetting("mostrar HUD", "esconde o muestra los indicadores en pantalla", true));
 
-    public BooleanSetting smoothCam = addSetting(new BooleanSetting("cámara cinemática", "usa la cámara cinemática mientras hagas zoom", false));
+    public NumberSetting scrollSens = sgScroll.add(new NumberSetting("sensibilidad del scroll", "sensibilidad de la rueda del ratón (0 para desactivar)",
+            0.4, 0, 8, 0.1));
+    public KeySetting scrollKey = sgScroll.add(new KeySetting("tecla del scroll", "qué tecla mantener para usar la rueda del ratón",
+            GLFW.GLFW_KEY_LEFT_CONTROL));
+
+    public NumberSetting mouseSensMultiplier = sgCam.add(new NumberSetting("sensibilidad", "multiplicador de la sensibilidad del ratón",
+            0.4, 0, 1, 0.05));
+    public BooleanSetting smoothCam = sgCam.add(new BooleanSetting("cámara cinemática", "usa la cámara cinemática mientras hagas zoom", false));
 
     private boolean prevSmoothCam;
     private double prevMouseSens;

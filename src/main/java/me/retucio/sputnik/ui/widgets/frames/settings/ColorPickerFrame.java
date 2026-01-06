@@ -2,10 +2,10 @@ package me.retucio.sputnik.ui.widgets.frames.settings;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.Setting;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.ColorSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.Setting;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.ui.widgets.buttons.*;
 import me.retucio.sputnik.ui.widgets.buttons.settings.SliderButton;
 import me.retucio.sputnik.ui.widgets.buttons.settings.ToggleButton;
@@ -75,7 +75,7 @@ public class ColorPickerFrame extends SettingsFrame {
         brightnessSetting.setDefaultValue(colorSetting.getDefaultBrightness());
 
         // añadir ajustes y tal
-        dummyModule.addSettings(redSetting, greenSetting, blueSetting, rainbowSpeedSetting, saturationSetting, brightnessSetting, rainbowSetting);
+        dummyModule.getSg("general").addAll(redSetting, greenSetting, blueSetting, rainbowSpeedSetting, saturationSetting, brightnessSetting, rainbowSetting);
         for (Setting setting : dummyModule.getSettings()) {
             if (setting instanceof NumberSetting n) n.onUpdate(v -> updateColorFromSettings());
             if (setting instanceof BooleanSetting b) b.onUpdate(v -> updateColorFromSettings());
@@ -92,8 +92,8 @@ public class ColorPickerFrame extends SettingsFrame {
 
         buttons.clear();
 
-        Module originalModule = this.module;
-        this.module = dummyModule;
+        Module originalModule = this.getModule();
+        this.setModule(dummyModule);
 
         // añadir botones
         int offset = h;
@@ -111,7 +111,7 @@ public class ColorPickerFrame extends SettingsFrame {
             }
         }
 
-        this.module = originalModule;
+        this.setModule(originalModule);
     }
 
 

@@ -1,6 +1,6 @@
 package me.retucio.sputnik.ui.widgets.buttons;
 
-import me.retucio.sputnik.module.settings.Setting;
+import me.retucio.sputnik.module.setting.Setting;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
 import me.retucio.sputnik.ui.widgets.Button;
 import net.minecraft.client.gui.DrawContext;
@@ -22,6 +22,12 @@ public abstract class SettingButton<S extends Setting> extends Button {
     public void drawTooltip(DrawContext ctx, int mouseX, int mouseY) {
         if (isHovered(mouseX, mouseY))
             ctx.drawTooltip(Text.of(setting.getDescription()), mouseX, mouseY + 20);
+    }
+
+    @Override
+    public boolean isHovered(int mouseX, int mouseY) {
+        return setting.getSg().isExtended()
+                && super.isHovered(mouseX, mouseY);
     }
 
     public S getSetting() {

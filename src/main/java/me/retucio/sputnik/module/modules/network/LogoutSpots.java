@@ -2,14 +2,15 @@ package me.retucio.sputnik.module.modules.network;
 
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.AddEntityEvent;
-import me.retucio.sputnik.event.events.RenderWorldEvent;
+import me.retucio.sputnik.event.events.Render3DEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
 import me.retucio.sputnik.module.ModuleManager;
 import me.retucio.sputnik.module.modules.misc.FakePlayer;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.ColorSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.MiscUtil;
 import me.retucio.sputnik.util.render.RenderUtil;
 import net.minecraft.client.network.OtherClientPlayerEntity;
@@ -31,16 +32,20 @@ import java.util.UUID;
 // lógica sutilmente robada de MeteorClient porque la mía era una mierda
 public class LogoutSpots extends Module {
 
-    public BooleanSetting outlines = addSetting(new BooleanSetting("contorno", "renderizar contorno de la caja (lados)", true));
-    public ColorSetting outlineColor = addSetting(new ColorSetting("color del contorno", "Color de las líneas", new Color(255, 0, 0, 230), false));
-    public NumberSetting lineWidth = addSetting(new NumberSetting("grosor de línea", "grosor de las líneas del contorno", 1.5, 0.5, 5, 0.1));
+    SettingGroup sgOutlines = addSg(new SettingGroup("contorno", true));
+    SettingGroup sgFilling = addSg(new SettingGroup("relleno", true));
+    SettingGroup sgMisc = addSg(new SettingGroup("misc.", true));
 
-    public BooleanSetting filling = addSetting(new BooleanSetting("relleno", "renderizar relleno de la caja (caras)", true));
-    public ColorSetting fillingColor = addSetting(new ColorSetting("color del relleno", "Color de los lados", new Color(230, 0, 0, 55), false));
+    public BooleanSetting outlines = sgOutlines.add(new BooleanSetting("contorno", "renderizar contorno de la caja (lados)", true));
+    public ColorSetting outlineColor = sgOutlines.add(new ColorSetting("color del contorno", "Color de las líneas", new Color(255, 0, 0, 230), false));
+    public NumberSetting lineWidth = sgOutlines.add(new NumberSetting("grosor de línea", "grosor de las líneas del contorno", 1.5, 0.5, 5, 0.1));
 
-    public BooleanSetting fullHeight = addSetting(new BooleanSetting("hitbox completa", "renderizar la caja completa de la hitbox, o solo marcar la posición", true));
+    public BooleanSetting filling = sgFilling.add(new BooleanSetting("relleno", "renderizar relleno de la caja (caras)", true));
+    public ColorSetting fillingColor = sgFilling.add(new ColorSetting("color del relleno", "Color de los lados", new Color(230, 0, 0, 55), false));
 
-    public BooleanSetting dummy = addSetting(new BooleanSetting("monigote", "spawnear un monigote para marcar la posición", true));
+    public BooleanSetting fullHeight = sgMisc.add(new BooleanSetting("hitbox completa", "renderizar la caja completa de la hitbox, o solo marcar la posición", true));
+
+    public BooleanSetting dummy = sgMisc.add(new BooleanSetting("monigote", "spawnear un monigote para marcar la posición", true));
 
     private final List<LogoutEntry> players = new ArrayList<>();
     private final List<PlayerListEntry> lastPlayerList = new ArrayList<>();
@@ -165,7 +170,7 @@ public class LogoutSpots extends Module {
     }
 
     @SubscribeEvent
-    public void onWorldRender(RenderWorldEvent event) {
+    public void onWorldRender(Render3DEvent event) {
         if (mc.player == null || mc.world == null) return;
 
         for (LogoutEntry entry : players)

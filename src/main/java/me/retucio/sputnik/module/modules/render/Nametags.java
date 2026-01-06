@@ -4,9 +4,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.EnumSetting;
-import me.retucio.sputnik.module.settings.ListSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.ListSetting;
 import me.retucio.sputnik.util.Lists;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
@@ -38,22 +39,25 @@ import java.util.concurrent.Executors;
 
 public class Nametags extends Module {
 
+    SettingGroup sgInfo = addSg(new SettingGroup("info. adicional", true));
+
     Map<EntityType<?>, Boolean> defaultEntities = Lists.allFalse(Lists.entityList);
-    public ListSetting<EntityType<?>> entities = addSetting(new ListSetting<>("entidades", "entidades cuyo nametag será visible",
+    public ListSetting<EntityType<?>> entities = sgGeneral.add(new ListSetting<>("entidades", "entidades cuyo nametag será visible",
             Lists.entityList, defaultEntities, Lists.entityNames));
-
-    public BooleanSetting alwaysVisible = addSetting(new BooleanSetting("siempre mostrar nametags", "mostrar nametag cuando el jugador está agachado o es invisible", false));
-    public BooleanSetting health = addSetting(new BooleanSetting("mostrar vida", "muestra la vida de una entidad en su nametag", true));
-    public EnumSetting<HealthMode> healthMode = addSetting(new EnumSetting<>("mostrar vida en", "de qué manera mostrar la vida", HealthMode.class, HealthMode.POINTS));
-
-    public BooleanSetting countItems = addSetting(new BooleanSetting("contar items", "muestra cuánto de un item hay en un stack dropeado", true));
-    public ListSetting<Item> items = addSetting(new ListSetting<>("items", "te permite elegir cuáles items tienen su nombre visible",
+    public ListSetting<Item> items = sgGeneral.add(new ListSetting<>("items", "te permite elegir cuáles items tienen su nombre visible",
             Lists.itemList, Lists.allTrue(Lists.itemList), Lists.itemNames));
-    public BooleanSetting showProjectileDamage = addSetting(new BooleanSetting("daño del proyectil", "muestra cuánto daño hace un proyectil en su nametag", true));
 
-    public BooleanSetting showSelf = addSetting(new BooleanSetting("mostrar propio", "mostrar nametag propio", false));
-    public BooleanSetting distinguishBabies = addSetting(new BooleanSetting("distinguir bebés", "cambia el nametag cuando una entidad está en su fase bebé", false));
-    public BooleanSetting petOwner = addSetting(new BooleanSetting("mostrar dueño", "muestra el dueño de una mascota (no funciona en servers no premium)", false));
+    public BooleanSetting health = sgGeneral.add(new BooleanSetting("mostrar vida", "muestra la vida de una entidad en su nametag", true));
+    public EnumSetting<HealthMode> healthMode = sgGeneral.add(new EnumSetting<>("mostrar vida en", "de qué manera mostrar la vida", HealthMode.class, HealthMode.POINTS));
+
+    public BooleanSetting alwaysVisible = sgGeneral.add(new BooleanSetting("siempre mostrar nametags", "mostrar nametag cuando el jugador está agachado o es invisible", false));
+    public BooleanSetting showSelf = sgGeneral.add(new BooleanSetting("mostrar propio", "mostrar nametag propio", false));
+
+    public BooleanSetting countItems = sgInfo.add(new BooleanSetting("contar items", "muestra cuánto de un item hay en un stack dropeado", true));
+    public BooleanSetting showProjectileDamage = sgInfo.add(new BooleanSetting("daño del proyectil", "muestra cuánto daño hace un proyectil en su nametag", true));
+    public BooleanSetting distinguishBabies = sgInfo.add(new BooleanSetting("distinguir bebés", "cambia el nametag cuando una entidad está en su fase bebé", false));
+    public BooleanSetting petOwner = sgInfo.add(new BooleanSetting("mostrar dueño", "muestra el dueño de una mascota (no funciona en servers no premium)", false));
+
 
     private final Map<UUID, String> cache = new ConcurrentHashMap<>();
     private static final ExecutorService executor = Executors.newCachedThreadPool();

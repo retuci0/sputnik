@@ -2,9 +2,9 @@ package me.retucio.sputnik.module.modules.player;
 
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
-import me.retucio.sputnik.module.settings.OptionSetting;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.settings.OptionSetting;
 import me.retucio.sputnik.util.Lists;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -16,10 +16,10 @@ import net.minecraft.util.math.Direction;
 
 public class Offhand extends Module {
 
-    public OptionSetting<Item> item = addSetting(new OptionSetting<>("ítem", "ítem a equipar",
+    public OptionSetting<Item> item = sgGeneral.add(new OptionSetting<>("ítem", "ítem a equipar",
             Lists.itemList, Items.TOTEM_OF_UNDYING, Lists.itemNames));
-    public NumberSetting delaySetting = addSetting(new NumberSetting("delay", "delay del cambiazo (en ticks)", 0, 0, 20, 1));
-    public BooleanSetting override = addSetting(new BooleanSetting("anular", "ignora que ya haya un ítem en la mano secundaria", true));
+    public NumberSetting delaySetting = sgGeneral.add(new NumberSetting("delay", "delay del cambiazo (en ticks)", 0, 0, 20, 1));
+    public BooleanSetting override = sgGeneral.add(new BooleanSetting("anular", "ignora que ya haya un ítem en la mano secundaria", true));
 
 
     private int delay;

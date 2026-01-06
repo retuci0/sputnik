@@ -9,10 +9,11 @@ import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
 import me.retucio.sputnik.module.ModuleManager;
 import me.retucio.sputnik.module.modules.misc.ChatPlus;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.ColorSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
-import me.retucio.sputnik.module.settings.StringSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.settings.StringSetting;
 import me.retucio.sputnik.util.ChatUtil;
 import me.retucio.sputnik.util.Colors;
 import org.lwjgl.glfw.GLFW;
@@ -22,25 +23,30 @@ import java.awt.*;
 // módulo no visible solo para los ajustes de la interfaz (y del cliente en general)
 public class GUI extends Module {
 
-    public ColorSetting color = addSetting(new ColorSetting("color", "color principal de la interfaz y el mod",
+    SettingGroup sgWidgets = addSg(new SettingGroup("widgets", true));
+    SettingGroup sgUi = addSg(new SettingGroup("interfaz", true));
+    SettingGroup sgChat = addSg(new SettingGroup("chat", true));
+    SettingGroup sgMisc = addSg(new SettingGroup("misc.", true));
+
+    public ColorSetting color = sgGeneral.add(new ColorSetting("color", "color principal de la interfaz y el mod",
             new Color(70, 20, 210, 230), false));
 
     // números negativos para deslizamiento inverso, 0 para desactivar
-    public NumberSetting scrollSens = addSetting(new NumberSetting("sensibilidad del scroll", "qué tan sensible es la interfaz a la rueda del ratón",
+    public NumberSetting scrollSens = sgWidgets.add(new NumberSetting("sensibilidad del scroll", "qué tan sensible es la interfaz a la rueda del ratón",
             5, -15, 15, 0.5));
-    public BooleanSetting scrollBar = addSetting(new BooleanSetting("barra de desplazamiento", "renderizar una barra de desplazamiento a la derecha de la interfaz", true));
+    public BooleanSetting scrollBar = sgWidgets.add(new BooleanSetting("barra de desplazamiento", "renderizar una barra de desplazamiento a la derecha de la interfaz", true));
 
-    public BooleanSetting searchBar = addSetting(new BooleanSetting("barra de búsqueda", "renderizar una barra de búsqueda que filtra resultados en todos los marcos abiertos", true));
-    public BooleanSetting matchCase = addSetting(new BooleanSetting("distinguir mayúsculas", "la búsqueda es sensible a mayúsculas y minúsculas", false));
+    public BooleanSetting searchBar = sgWidgets.add(new BooleanSetting("barra de búsqueda", "renderizar una barra de búsqueda que filtra resultados en todos los marcos abiertos", true));
+    public BooleanSetting matchCase = sgWidgets.add(new BooleanSetting("distinguir mayúsculas", "la búsqueda es sensible a mayúsculas y minúsculas", false));
     // ^^^ no sé de qué sirve porque está todo en minúsculas pero bueno
 
-    public BooleanSetting blur = addSetting(new BooleanSetting("desenfoque", "desenfocar el fondo mientras la interfaz está abierta", true));
-    public StringSetting watermark = addSetting(new StringSetting("marca de agua", "marca de agua para interfaces (dejar vacío para desactivar)", me.retucio.sputnik.Sputnik.getVersionName(), 40));
+    public BooleanSetting blur = sgUi.add(new BooleanSetting("desenfoque", "desenfocar el fondo mientras la interfaz está abierta", true));
+    public StringSetting watermark = sgUi.add(new StringSetting("marca de agua", "marca de agua para interfaces (dejar vacío para desactivar)", me.retucio.sputnik.Sputnik.getVersionName(), 40));
 
-    public StringSetting commandPrefix = addSetting(new StringSetting("prefijo", "prefijo de los comandos", "$", 10));
-    public StringSetting chatName = addSetting(new StringSetting("nombre", "qué nombre usar en notificaciones por el chat", "smegma", 20));
+    public StringSetting commandPrefix = sgChat.add(new StringSetting("prefijo", "prefijo de los comandos", "$", 10));
+    public StringSetting chatName = sgChat.add(new StringSetting("nombre", "qué nombre usar en notificaciones por el chat", "smegma", 20));
 
-    public BooleanSetting multipleKeybinds = addSetting(new BooleanSetting("teclas multimódulo", "permitir asignar la misma tecla a más de un módulo", false));
+    public BooleanSetting multipleKeybinds = sgMisc.add(new BooleanSetting("teclas multimódulo", "permitir asignar la misma tecla a más de un módulo", false));
 
     public GUI() {
         super("interfaz",

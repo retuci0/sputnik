@@ -2,8 +2,8 @@ package me.retucio.sputnik.module;
 
 import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.event.SubscribeEvent;
-import me.retucio.sputnik.module.modules.camera.*;
 import me.retucio.sputnik.module.modules.client.HUD;
+import me.retucio.sputnik.module.modules.camera.*;
 import me.retucio.sputnik.module.modules.misc.*;
 import me.retucio.sputnik.module.modules.network.*;
 import me.retucio.sputnik.module.modules.player.*;

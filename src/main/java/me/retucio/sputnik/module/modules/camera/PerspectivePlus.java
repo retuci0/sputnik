@@ -5,28 +5,35 @@ import me.retucio.sputnik.event.events.MouseScrollEvent;
 import me.retucio.sputnik.event.events.PerspectiveChangeEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.*;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.KeySetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.KeyUtil;
 import org.lwjgl.glfw.GLFW;
 
 // continúa en CameraMixin
 public class PerspectivePlus extends Module {
 
-    private double distance;
-
     // ajustes
-    public BooleanSetting clip = addSetting(new BooleanSetting(
+
+    SettingGroup sgScroll = addSg(new SettingGroup("scrolleo", true));
+
+    public BooleanSetting clip = sgGeneral.add(new BooleanSetting(
             "clip", "atravesar bloques con la cámara", true));
 
-    public NumberSetting defaultDistance = addSetting(new NumberSetting(
+    public NumberSetting defaultDistance = sgGeneral.add(new NumberSetting(
             "distancia", "distancia a la que está la cámara del jugador por defecto",
             4, 1, 20, 0.2));
 
-    public NumberSetting scrollSens = addSetting(new NumberSetting(
+    public NumberSetting scrollSens = sgScroll.add(new NumberSetting(
             "sensibilidad del scroll", "sensibilidad de la rueda del ratón (0 para desactivar)",
             1, 0, 8, 0.1));
 
-    public KeySetting scrollKey = addSetting(new KeySetting("tecla del scroll", "qué tecla mantener para usar la rueda del ratón", GLFW.GLFW_KEY_LEFT_ALT));
+    public KeySetting scrollKey = sgScroll.add(new KeySetting("tecla del scroll", "qué tecla mantener para usar la rueda del ratón",
+            GLFW.GLFW_KEY_LEFT_ALT));
+
+    private double distance;
 
     public PerspectivePlus() {
         super("perspectiva plus",

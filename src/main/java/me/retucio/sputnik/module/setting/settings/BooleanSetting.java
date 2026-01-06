@@ -1,4 +1,6 @@
-package me.retucio.sputnik.module.settings;
+package me.retucio.sputnik.module.setting.settings;
+
+import me.retucio.sputnik.module.setting.Setting;
 
 import java.util.function.Consumer;
 

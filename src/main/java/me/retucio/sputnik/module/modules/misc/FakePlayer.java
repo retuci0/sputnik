@@ -3,7 +3,7 @@ package me.retucio.sputnik.module.modules.misc;
 import com.mojang.authlib.GameProfile;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.StringSetting;
+import me.retucio.sputnik.module.setting.settings.StringSetting;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class FakePlayer extends Module {
 
-    public StringSetting name = addSetting(new StringSetting("nombre", "qué nombre asignarle al jugador", "apio boy", 22));
+    public StringSetting name = sgGeneral.add(new StringSetting("nombre", "qué nombre asignarle al jugador", "apio boy", 22));
 
     private OtherClientPlayerEntity player = null;
 

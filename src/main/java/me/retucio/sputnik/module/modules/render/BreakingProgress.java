@@ -1,13 +1,14 @@
 package me.retucio.sputnik.module.modules.render;
 
 import me.retucio.sputnik.event.SubscribeEvent;
-import me.retucio.sputnik.event.events.RenderWorldEvent;
+import me.retucio.sputnik.event.events.Render3DEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.ColorSetting;
-import me.retucio.sputnik.module.settings.EnumSetting;
-import me.retucio.sputnik.module.settings.NumberSetting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import me.retucio.sputnik.util.render.RenderUtil;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -18,17 +19,21 @@ import java.awt.*;
 
 public class BreakingProgress extends Module {
 
-    public EnumSetting<BreakMode> breakMode = addSetting(new EnumSetting<>("modo de minado", "elige si el cubo se encoge o se dilata",
+    SettingGroup sgOulines = addSg(new SettingGroup("contorno", true));
+    SettingGroup sgFilling = addSg(new SettingGroup("relleno", true));
+
+    public EnumSetting<BreakMode> breakMode = sgGeneral.add(new EnumSetting<>("modo de minado", "elige si el cubo se encoge o se dilata",
             BreakMode.class, BreakMode.INWARDS));
 
-    public BooleanSetting outlines = addSetting(new BooleanSetting("contorno", "renderizar contorno", true));
-    public ColorSetting outlineColor = addSetting(new ColorSetting("color del contorno", "color del contorno",
+    public BooleanSetting outlines = sgOulines.add(new BooleanSetting("contorno", "renderizar contorno", true));
+    public ColorSetting outlineColor = sgOulines.add(new ColorSetting("color del contorno", "color del contorno",
             new Color(0, 255, 0, 200), false));
-    public NumberSetting lineWidth = addSetting(new NumberSetting("grosor de línea", "grosor de las líneas del contorno", 1, 1, 5, 0.1));
+    public NumberSetting lineWidth = sgOulines.add(new NumberSetting("grosor de línea", "grosor de las líneas del contorno", 1, 1, 5, 0.1));
 
-    public BooleanSetting fillings = addSetting(new BooleanSetting("relleno", "renderizar relleno", true));
-    public ColorSetting fillingColor = addSetting(new ColorSetting("color del relleno", "color del relleno",
+    public BooleanSetting fillings = sgFilling.add(new BooleanSetting("relleno", "renderizar relleno", true));
+    public ColorSetting fillingColor = sgFilling.add(new ColorSetting("color del relleno", "color del relleno",
             new Color(0, 255, 0, 60), false));
+
 
     public BreakingProgress() {
         super("progreso de minado",
@@ -37,7 +42,7 @@ public class BreakingProgress extends Module {
     }
 
     @SubscribeEvent
-    public void onRenderWorld(RenderWorldEvent event) {
+    public void onRenderWorld(Render3DEvent event) {
         if (mc.interactionManager == null || mc.world == null) return;
         if (!(mc.crosshairTarget instanceof BlockHitResult hitResult)) return;
         BlockPos pos = hitResult.getBlockPos();

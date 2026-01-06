@@ -1,10 +1,12 @@
-package me.retucio.sputnik.module.settings;
+package me.retucio.sputnik.module.setting.settings;
+
+import me.retucio.sputnik.module.setting.Setting;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class OptionSetting<T> extends Setting{
+public class OptionSetting<T> extends Setting {
 
     private final List<T> options;
     private Map<T, String> displayNames;

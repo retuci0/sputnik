@@ -4,10 +4,11 @@ import me.retucio.sputnik.Sputnik;
 import me.retucio.sputnik.config.ConfigManager;
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.event.events.sputnik.ToggleModuleEvent;
-import me.retucio.sputnik.module.settings.BooleanSetting;
-import me.retucio.sputnik.module.settings.EnumSetting;
-import me.retucio.sputnik.module.settings.KeySetting;
-import me.retucio.sputnik.module.settings.Setting;
+import me.retucio.sputnik.module.setting.SettingGroup;
+import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
+import me.retucio.sputnik.module.setting.settings.KeySetting;
+import me.retucio.sputnik.module.setting.Setting;
 import me.retucio.sputnik.util.ChatUtil;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
@@ -15,6 +16,7 @@ import org.lwjgl.glfw.GLFW;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 // clase base para los módulos
 public class Module {
@@ -33,22 +35,24 @@ public class Module {
     protected KeySetting bind = new KeySetting("tecla", "tecla asignada al módulo, ESC para desactivar", GLFW.GLFW_KEY_UNKNOWN);
     protected BooleanSetting notify = new BooleanSetting("notificar", "notificar en el chat al activar / desactivar", true);
 
-    private final List<Setting> settings = new ArrayList<>();
+    protected final List<SettingGroup> sgs = new ArrayList<>();
+    protected final SettingGroup sgGeneral = addSg(new SettingGroup("general", true));
 
     protected MinecraftClient mc = MinecraftClient.getInstance();
+
 
     public Module(String name, String description, Category category) {
         this.name = name;
         this.description = description;
         this.category =  category;
-        addSettings(bind, keyMode, notify);
+        sgGeneral.addAll(bind, keyMode, notify);
     }
 
     public Module(String name, String description, Category category, int key) {
         this.name = name;
         this.description = description;
         this.category = category;
-        addSettings(bind, keyMode, notify);
+        sgGeneral.addAll(bind, keyMode, notify);
         this.bind.setDefaultKey(key);
 
         // puto marcos
@@ -57,20 +61,32 @@ public class Module {
             this.bind.setKey(key);
     }
 
+
     // ajustes
+
+    public SettingGroup addSg(SettingGroup sg) {
+        sgs.add(sg);
+        sg.setModule(this);
+        return sg;
+    }
+
+    public List<SettingGroup> getSgs() {
+        return sgs;
+    }
+
+    public SettingGroup getSg(String name) {
+        for (SettingGroup sg : sgs) {
+            if (sg.getName().equals(name)) {
+                return sg;
+            }
+        }
+        return null;
+    }
+
     public List<Setting> getSettings() {
+        List<Setting> settings = new ArrayList<>();
+        sgs.forEach(sg -> sg.forEach(settings::add));
         return settings;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <S extends Setting> S addSetting(Setting setting) {
-        settings.add(setting);
-        setting.setModule(this);
-        return (S) setting;  // por conveniencia
-    }
-
-    public void addSettings(Setting... settings) {
-        for (Setting setting : settings) addSetting(setting);
     }
 
 
@@ -100,9 +116,8 @@ public class Module {
     }
 
 
-    // otros métodos
+    // tick (ejecutado 20 veces por segundo)
     public void onTick() {}
-    public void onKey(int key, int action) {}
 
     // getters y setters
     public String getName() {

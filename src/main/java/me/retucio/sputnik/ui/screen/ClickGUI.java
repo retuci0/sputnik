@@ -7,8 +7,8 @@ import me.retucio.sputnik.event.events.MouseClickEvent;
 import me.retucio.sputnik.event.events.MouseScrollEvent;
 import me.retucio.sputnik.event.events.sputnik.SettingsFrameEvent;
 import me.retucio.sputnik.module.Module;
-import me.retucio.sputnik.module.settings.Setting;
-import me.retucio.sputnik.module.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.Setting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
 import me.retucio.sputnik.ui.widgets.buttons.settings.ListButton;
 import me.retucio.sputnik.ui.widgets.buttons.ModuleButton;
 import me.retucio.sputnik.ui.widgets.buttons.SettingButton;
@@ -233,15 +233,17 @@ public class ClickGUI extends Screen {
                     continue;
                 }
 
-                String name = setting.getName();
-                String description = setting.getDescription();
+                String name = MiscUtil.removeAccentMarks(setting.getName());
+                String description = MiscUtil.removeAccentMarks(setting.getDescription());
+                String sgName = MiscUtil.removeAccentMarks(setting.getSg().getName());
 
                 if (!guiSettings.matchCase.isEnabled()) {
                     name = name.toLowerCase();
                     description = description.toLowerCase();
+                    sgName = sgName.toLowerCase();
                 }
 
-                setting.setSearchMatch(name.contains(searchInput) || description.contains(searchInput));
+                setting.setSearchMatch(name.contains(searchInput) || description.contains(searchInput) || sgName.contains(searchInput));
             }
         }
     }
@@ -249,7 +251,7 @@ public class ClickGUI extends Screen {
     // abrir un marco donde se encuentran los ajustes del módulo deseado
     public void openSettingsFrame(Module module, int x, int y) {
         for (SettingsFrame frame : settingsFrames) {
-            if (frame.module == module) {
+            if (frame.getModule() == module) {
                 frame.setX(x);
                 frame.setY(y);
                 return;
@@ -275,7 +277,7 @@ public class ClickGUI extends Screen {
         List<SettingsFrame> toRemove = new ArrayList<>();
         for (SettingsFrame sf : settingsFrames) {
             if ((sf instanceof ColorPickerFrame cpf && cpf.dummyModule == module)  // para los selectores de colores
-                    || (!(sf instanceof ColorPickerFrame) && sf.module == module)) { // lógica muy mierdas, lo sé, pero paso de hacerlo bien
+                    || (!(sf instanceof ColorPickerFrame) && sf.getModule() == module)) { // lógica muy mierdas, lo sé, pero paso de hacerlo bien
                 toRemove.add(sf);
                 Sputnik.EVENT_BUS.post(new SettingsFrameEvent.Close(sf));
                 unselect(sf);
@@ -288,7 +290,7 @@ public class ClickGUI extends Screen {
     // verificar si un módulo tiene su marco de ajustes abierto
     public boolean isSettingsFrameOpen(Module module) {
         return settingsFrames.stream()
-                .anyMatch(sf -> sf.module.getName().equals(module.getName()));
+                .anyMatch(sf -> sf.getModule().getName().equals(module.getName()));
     }
 
     public boolean isColorPickerFrameOpen(ColorSetting setting) {
