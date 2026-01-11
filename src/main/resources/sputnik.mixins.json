@@ -52,6 +52,7 @@
     "EmitterParticleMixin",
     "EquipmentRendererMixin",
     "FogRendererMixin",
+    "FontManagerMixin",
     "GameOptionsMixin",
     "GameRendererMixin",
     "HeldItemRendererMixin",

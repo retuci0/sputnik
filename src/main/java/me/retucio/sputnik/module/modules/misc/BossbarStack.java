@@ -4,21 +4,41 @@ import me.retucio.sputnik.event.events.RenderBossbarEvent;
 import me.retucio.sputnik.event.SubscribeEvent;
 import me.retucio.sputnik.module.Category;
 import me.retucio.sputnik.module.Module;
+import me.retucio.sputnik.module.setting.SettingGroup;
 import me.retucio.sputnik.module.setting.settings.BooleanSetting;
+import me.retucio.sputnik.module.setting.settings.ColorSetting;
+import me.retucio.sputnik.module.setting.settings.EnumSetting;
 import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import net.minecraft.client.gui.hud.ClientBossBar;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 public class BossbarStack extends Module {
 
-    public BooleanSetting stackBars = sgGeneral.add(new BooleanSetting("apilar barras", "apilar las bossbars", true));
-    public BooleanSetting hideNames = sgGeneral.add(new BooleanSetting("esconder nombres", "no renderiza el nombre de los bosses", false));
-    public NumberSetting spaceReduction = sgGeneral.add(new NumberSetting("reducción de espacio", "cuánto reducir el espacio entre bossbars",
-            0, 0, 10, 0.1));
+    public BooleanSetting stackBars = sgGeneral.add(new BooleanSetting(
+            "apilar barras", "apilar las bossbars",
+            true
+    ));
+
+    public BooleanSetting hideNames = sgGeneral.add(new BooleanSetting(
+            "esconder nombres", "no renderiza el nombre de los bosses",
+            false
+    ));
+
+    public NumberSetting spaceReduction = sgGeneral.add(new NumberSetting(
+            "reducción de espacio",
+            "cuánto reducir el espacio entre bossbars",
+            0,
+            0,
+            10,
+            0.1
+    ));
+
 
     private final Map<ClientBossBar, Integer> bossBarMap = new WeakHashMap<>();
 

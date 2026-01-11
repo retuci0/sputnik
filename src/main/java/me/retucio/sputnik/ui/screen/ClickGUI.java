@@ -35,6 +35,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static me.retucio.sputnik.ui.widgets.frames.settings.ClientSettingsFrame.guiSettings;
 
@@ -248,15 +249,21 @@ public class ClickGUI extends Screen {
         }
     }
 
+    public SettingsFrame getSfOfModule(Module module) {
+        Optional<SettingsFrame> frame = settingsFrames.stream()
+                .filter(sf -> sf.getModule().equals(module))
+                .findFirst();
+
+        return frame.orElseGet(() ->
+                new SettingsFrame(module, 0, 0, 100, 20)
+        );
+    }
+
     // abrir un marco donde se encuentran los ajustes del módulo deseado
     public void openSettingsFrame(Module module, int x, int y) {
-        for (SettingsFrame frame : settingsFrames) {
-            if (frame.getModule() == module) {
-                frame.setX(x);
-                frame.setY(y);
-                return;
-            }
-        }
+        // asegurarse de que no se sale de la pantalla
+        x = Math.clamp(x, 0, mc.getWindow().getScaledWidth() - 80);
+        y = Math.clamp(y, 0, mc.getWindow().getScaledHeight() - 120);
 
         SettingsFrame frame = new SettingsFrame(module, x, y, 100, 20);
         settingsFrames.add(frame);
@@ -289,8 +296,8 @@ public class ClickGUI extends Screen {
 
     // verificar si un módulo tiene su marco de ajustes abierto
     public boolean isSettingsFrameOpen(Module module) {
-        return settingsFrames.stream()
-                .anyMatch(sf -> sf.getModule().getName().equals(module.getName()));
+        return settingsFrames.stream().anyMatch(
+                sf -> sf.getModule().equals(module));
     }
 
     public boolean isColorPickerFrameOpen(ColorSetting setting) {

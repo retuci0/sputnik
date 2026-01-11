@@ -2,6 +2,7 @@ package me.retucio.sputnik.mixin;
 
 import me.retucio.sputnik.module.ModuleManager;
 import me.retucio.sputnik.module.modules.player.ElytraBounce;
+import me.retucio.sputnik.module.modules.player.Step;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.sound.SoundCategory;
@@ -12,6 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static me.retucio.sputnik.Sputnik.mc;
 
@@ -26,7 +28,7 @@ public abstract class LivingEntityMixin {
 
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "tickMovement", at = @At("TAIL"))
-    public void recastIfLanded(CallbackInfo ci) {
+    private void recastIfLanded(CallbackInfo ci) {
         ElytraBounce bounce = ModuleManager.INSTANCE.getModuleByClass(ElytraBounce.class);
 
         if (!((Object) this instanceof ClientPlayerEntity)
@@ -46,5 +48,12 @@ public abstract class LivingEntityMixin {
         }
 
         prevElytra = elytra;
+    }
+
+
+    @Inject(method = "getStepHeight", at = @At("RETURN"), cancellable = true)
+    private void step(CallbackInfoReturnable<Float> cir) {
+        Step step = ModuleManager.INSTANCE.getModuleByClass(Step.class);
+        if (step.isEnabled()) cir.setReturnValue(step.height.getFloatValue());
     }
 }

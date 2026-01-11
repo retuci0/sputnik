@@ -189,8 +189,15 @@ public class ConfigManager {
     private static void applySettingsFrames() {
         config.settingsFrames.forEach((moduleName, position) -> {
             Module module = ModuleManager.INSTANCE.getModuleByName(moduleName);
+
+            if (module == null) {
+                Sputnik.LOGGER.warn("\"null\" como módulo (\"{}\")", moduleName);
+                return;
+            }
+
             ClickGUI.INSTANCE.openSettingsFrame(module, position[0], position[1]);
         });
+
         Sputnik.LOGGER.info("estados de marcos de ajustes aplicados");
     }
 

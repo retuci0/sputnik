@@ -36,6 +36,7 @@ public class Lists {
     public static Map<ScreenHandlerType<?>, String> screenNames;
 
     public static final List<Color> colorList = new ArrayList<>();
+    public static final List<String> fontList = new ArrayList<>();
 
     // intentar traducir nombres y fallar miserablemente
     public static void init() {
@@ -68,7 +69,16 @@ public class Lists {
                 ).toList());
 
         colorList.addAll(Arrays.asList(
-                RED, ORANGE, YELLOW, LIME, GREEN, CYAN, CELESTE, BLUE, PURPLE, MAGENTA, PINK, LAVENDER, WHITE, SILVER, GRAY, BLACK, BROWN));
+                RED, ORANGE, YELLOW, LIME, GREEN, CYAN,
+                CELESTE, BLUE, PURPLE, MAGENTA, PINK,
+                LAVENDER, WHITE, SILVER, GRAY, BLACK, BROWN
+        ));
+
+        fontList.addAll(List.of(
+                "bahnschrift", "calibri", "cantarell", "comic-sans-ms",
+                "deja-vu-sans-mono", "new-times-roman", "roboto", "segoe-ui",
+                "ubuntu"
+        ));
     }
 
     public static <T> Map<T, Boolean> allTrue(List<T> options) {

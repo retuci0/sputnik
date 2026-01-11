@@ -32,6 +32,7 @@ public class CommandManager {
 
     public static void registerCommands() {
         addCommand(new BindCommand());
+        addCommand(new ConfigCommand());
         addCommand(new CopyScreenshotCommand());
         addCommand(new EnderChestCommand());
         addCommand(new GarbageCleanerCommand());

@@ -9,6 +9,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import me.retucio.sputnik.module.Module;
 import me.retucio.sputnik.module.ModuleManager;
+import me.retucio.sputnik.util.MiscUtil;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
 
@@ -19,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
 public class ModuleArgumentType implements ArgumentType<Module> {
 
     public static final ModuleArgumentType INSTANCE = new ModuleArgumentType();
+
     private static final DynamicCommandExceptionType UNKNOWN_MODULE = new DynamicCommandExceptionType(
             name -> Text.literal("módulo \"" + name + "\" no encontrado"));
 
@@ -35,7 +37,8 @@ public class ModuleArgumentType implements ArgumentType<Module> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return CommandSource.suggestMatching(ModuleManager.INSTANCE.getModules().stream().map(module -> module.getName().replace(" ", "_")), builder);
+        return CommandSource.suggestMatching(ModuleManager.INSTANCE.getModules()
+                .stream().map(module -> MiscUtil.removeAccentMarks(module.getName().replace(" ", "_"))), builder);
     }
 
     @Override

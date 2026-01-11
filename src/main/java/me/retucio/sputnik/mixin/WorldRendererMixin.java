@@ -1,5 +1,6 @@
 package me.retucio.sputnik.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import me.retucio.sputnik.Sputnik;
@@ -18,12 +19,11 @@ import net.minecraft.util.profiler.Profiler;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.lang.annotation.Target;
 
 import static me.retucio.sputnik.Sputnik.EVENT_BUS;
 import static me.retucio.sputnik.Sputnik.mc;
@@ -66,11 +66,18 @@ public abstract class WorldRendererMixin {
         if (!noRender.blindnessEffect.isEnabled() || !noRender.darknessEffect.isEnabled()) cir.setReturnValue(null);
     }
 
-    @Redirect(method = "renderTargetBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/ColorHelper;toAlpha(I)I"))
-    private int modifyBlockOutlineColor(int alpha) {
-        BlockOutline outline = ModuleManager.INSTANCE.getModuleByClass(BlockOutline.class);
-        if (!outline.isEnabled()) return ColorHelper.toAlpha(alpha);
 
+    @ModifyArg(method = "renderTargetBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawBlockOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;DDDLnet/minecraft/client/render/state/OutlineRenderState;IF)V"))
+    private int modifyBlockOutlineColor(int original) {
+        BlockOutline outline = ModuleManager.INSTANCE.getModuleByClass(BlockOutline.class);
+        if (!outline.isEnabled()) return original;
         return outline.color.getRGB();
+    }
+
+    @ModifyArg(method = "renderTargetBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawBlockOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;DDDLnet/minecraft/client/render/state/OutlineRenderState;IF)V"))
+    private float modifyBlockOutlineLineWidth(float original) {
+        BlockOutline outline = ModuleManager.INSTANCE.getModuleByClass(BlockOutline.class);
+        if (!outline.isEnabled()) return original;
+        return outline.lineWidth.getFloatValue();
     }
 }

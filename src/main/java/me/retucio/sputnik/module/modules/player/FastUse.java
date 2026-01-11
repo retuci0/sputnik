@@ -6,19 +6,60 @@ import me.retucio.sputnik.module.setting.settings.BooleanSetting;
 import me.retucio.sputnik.module.setting.settings.NumberSetting;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.glfw.GLFW;
 
 public class FastUse extends Module {
 
-    public BooleanSetting items = sgGeneral.add(new BooleanSetting("items", "usar items precozmente", true));
-    public NumberSetting itemCooldown = sgGeneral.add(new NumberSetting("cooldown de items", "cooldown para usar items en ticks", 0, 0, 4, 1));
+    public BooleanSetting items = sgGeneral.add(new BooleanSetting(
+            "items",
+            "usar items precozmente",
+            true
+    ));
 
-    public BooleanSetting blocks = sgGeneral.add(new BooleanSetting("bloques", "colocar bloques precozmente", true));
-    public NumberSetting blockCooldown = sgGeneral.add(new NumberSetting("cooldown de bloques", "cooldown para colocar bloques en ticks", 0, 0, 4, 1));
+    public NumberSetting itemCooldown = sgGeneral.add(new NumberSetting(
+            "cooldown de items",
+            "cooldown para usar items en ticks",
+            0,
+            0,
+            4,
+            1
+    ));
+
+
+    public BooleanSetting blocks = sgGeneral.add(new BooleanSetting(
+            "bloques",
+            "colocar bloques precozmente",
+            true
+    ));
+
+    public NumberSetting blockCooldown = sgGeneral.add(new NumberSetting(
+            "cooldown de bloques",
+            "cooldown para colocar bloques en ticks",
+            0,
+            0,
+            4,
+            1
+    ));
+
+
+    public BooleanSetting mining = sgGeneral.add(new BooleanSetting(
+            "minar",
+            "minar precozmente",
+            true
+    ));
+
+    public NumberSetting miningCooldown = sgGeneral.add(new NumberSetting(
+            "cooldown al minar",
+            "cooldown entre rotura de bloques en ticks",
+            5, 0, 20, 1
+    ));
+
 
     public FastUse() {
         super("precoz",
                 "hace cosas como usar items o colocar bloques más rápido",
-                Category.PLAYER);
+                Category.PLAYER,
+                GLFW.GLFW_KEY_F6);
 
         items.onUpdate(v -> itemCooldown.setVisible(v));
         blocks.onUpdate(v -> blockCooldown.setVisible(v));

@@ -7,6 +7,7 @@ import me.retucio.sputnik.module.setting.settings.ListSetting;
 import me.retucio.sputnik.ui.widgets.buttons.SettingButton;
 import me.retucio.sputnik.ui.screen.ClickGUI;
 import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
+import me.retucio.sputnik.util.ChatUtil;
 import me.retucio.sputnik.util.Colors;
 import me.retucio.sputnik.util.KeyUtil;
 import net.minecraft.client.gui.DrawContext;

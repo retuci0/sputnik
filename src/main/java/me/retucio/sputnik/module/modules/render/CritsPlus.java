@@ -6,6 +6,7 @@ import me.retucio.sputnik.module.setting.SettingGroup;
 import me.retucio.sputnik.module.setting.settings.BooleanSetting;
 import me.retucio.sputnik.module.setting.settings.ColorSetting;
 import me.retucio.sputnik.module.setting.settings.NumberSetting;
+import me.retucio.sputnik.util.Colors;
 
 import java.awt.*;
 
@@ -19,7 +20,7 @@ public class CritsPlus extends Module {
     SettingGroup sgAppearance = addSg(new SettingGroup("aspecto", true));
     SettingGroup sgBehaviour = addSg(new SettingGroup("funcionamiento", true));
 
-    public ColorSetting color = sgAppearance.add(new ColorSetting("color", "color de las partículas", new Color(0, 0, 255, 255), false));
+    public ColorSetting color = sgAppearance.add(new ColorSetting("color", "color de las partículas", Colors.mainColor, false));
     public NumberSetting scale = sgAppearance.add(new NumberSetting("escala", "tamaño", 1, 0, 2, 0.05));
     public NumberSetting multiplier = sgAppearance.add(new NumberSetting("múltiplo", "número por el que multiplicar la cantidad de partículas generadas", 1, 0, 10, 0.1));
 

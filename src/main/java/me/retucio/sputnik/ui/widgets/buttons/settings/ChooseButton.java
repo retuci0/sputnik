@@ -81,7 +81,7 @@ public class ChooseButton<T> extends SettingButton<OptionSetting<T>> {
                     String displayName = setting.getDisplayName(option);
                     BooleanSetting b = new BooleanSetting(
                             displayName,
-                            "incluir " + displayName,
+                            "seleccionar " + displayName,
                             setting.is(option)
                     );
 

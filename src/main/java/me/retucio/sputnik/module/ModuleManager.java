@@ -10,6 +10,7 @@ import me.retucio.sputnik.module.modules.player.*;
 import me.retucio.sputnik.module.modules.render.*;
 import me.retucio.sputnik.module.modules.render.CritsPlus;
 import me.retucio.sputnik.module.modules.world.*;
+import me.retucio.sputnik.util.MiscUtil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class ModuleManager {
         modules.add(new ElytraBounce());
         modules.add(new FakePlayer());
         modules.add(new FastUse());
+        modules.add(new Fonts());
         modules.add(new Freecam());
         modules.add(new Freelook());
         modules.add(new Fullbright());
@@ -62,15 +64,18 @@ public class ModuleManager {
         modules.add(new NoRender());
         modules.add(new Offhand());
         modules.add(new PacketDelay());
+        modules.add(new Particles());
         modules.add(new PerspectivePlus());
         modules.add(new PortalGUI());
         modules.add(new Racist());
         modules.add(new Reconnect());
+        modules.add(new ReverseStep());
         modules.add(new Rotations());
         modules.add(new RPackBypass());
         modules.add(new SafeWalk());
         modules.add(new ScreenshotPlus());
         modules.add(new ShulkerPeek());
+        modules.add(new Step());
         modules.add(new TimeChanger());
         modules.add(new UIMove());
         modules.add(new WarnLowDurability());
@@ -105,7 +110,8 @@ public class ModuleManager {
 
     public Module getModuleByName(String name) {
         for (Module module : modules)
-            if (module.getName().equalsIgnoreCase(name)) return module;
+            if (MiscUtil.removeAccentMarks(module.getName()).equalsIgnoreCase(name))
+                return module;
         return null;
     }
 

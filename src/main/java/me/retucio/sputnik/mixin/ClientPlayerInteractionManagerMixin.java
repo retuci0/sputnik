@@ -6,6 +6,7 @@ import me.retucio.sputnik.event.events.InteractEntityEvent;
 import me.retucio.sputnik.event.events.PlaceBlockEvent;
 import me.retucio.sputnik.module.ModuleManager;
 import me.retucio.sputnik.module.modules.camera.Freecam;
+import me.retucio.sputnik.module.modules.player.FastUse;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -16,6 +17,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,8 +34,8 @@ import static me.retucio.sputnik.Sputnik.mc;
 @Mixin(ClientPlayerInteractionManager.class)
 public abstract class ClientPlayerInteractionManagerMixin {
 
-    @Shadow @Final
-    private MinecraftClient client;
+    @Shadow
+    private int blockBreakingCooldown;
 
     @Unique
     Freecam freecam;
@@ -68,5 +71,14 @@ public abstract class ClientPlayerInteractionManagerMixin {
         if (mc.player != player) return;
         AttackEntityEvent event = EVENT_BUS.post(new AttackEntityEvent(target));
         if (event.isCancelled()) ci.cancel();
+    }
+
+
+
+    @Inject(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I"))
+    private void modifyBlockBreakingCooldown(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
+        FastUse fastUse = ModuleManager.INSTANCE.getModuleByClass(FastUse.class);
+        if (!fastUse.isEnabled() || !fastUse.mining.isEnabled()) return;
+        blockBreakingCooldown = fastUse.miningCooldown.getIntValue();
     }
 }

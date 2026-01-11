@@ -14,6 +14,8 @@ public class Layers {
     private static final RenderLayer QUADS;
     private static final RenderLayer QUADS_CULL;
 
+    private static final RenderLayer TEXT;
+
 
     public static RenderLayer lines() {
         return LINES;
@@ -31,12 +33,18 @@ public class Layers {
         return QUADS_CULL;
     }
 
+    public static RenderLayer text() {
+        return TEXT;
+    }
+
     static {
         LINES = RenderLayer.of(Sputnik.MOD_ID + "_lines", RenderSetup.builder(LINES_PIPELINE).build());
         LINES_CULL = RenderLayer.of(Sputnik.MOD_ID + "_lines_cull", RenderSetup.builder(LINES_CULL_PIPELINE).build());
 
         QUADS = RenderLayer.of(Sputnik.MOD_ID + "_quads", RenderSetup.builder(QUADS_PIPELINE).build());
-        QUADS_CULL = RenderLayer.of(Sputnik.MOD_ID + "quads_cull", RenderSetup.builder(QUADS_CULL_PIPELINE).build());
+        QUADS_CULL = RenderLayer.of(Sputnik.MOD_ID + "_quads_cull", RenderSetup.builder(QUADS_CULL_PIPELINE).build());
+
+        TEXT = RenderLayer.of(Sputnik.MOD_ID + "_text", RenderSetup.builder(TEXT_PIPELINE).build());
     }
 
 }

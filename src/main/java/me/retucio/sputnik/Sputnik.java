@@ -29,6 +29,7 @@ import me.retucio.sputnik.ui.widgets.frames.SettingsFrame;
 import me.retucio.sputnik.ui.widgets.Button;
 
 import me.retucio.sputnik.util.*;
+import me.retucio.sputnik.util.KeyUtil;
 import me.retucio.sputnik.util.render.DrawUtil;
 import me.retucio.sputnik.util.render.RenderUtil;
 
@@ -68,6 +69,11 @@ public class Sputnik implements ClientModInitializer {
 
     private Screen prevScreen;
     public static boolean settingsApplied = false;
+
+    static {
+        // puta vida
+        System.setProperty("java.awt.headless", "false");
+    }
 
     @Override
     public void onInitializeClient() {

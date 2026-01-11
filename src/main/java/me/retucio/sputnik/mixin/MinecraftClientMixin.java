@@ -14,9 +14,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -26,6 +26,12 @@ public abstract class MinecraftClientMixin {
 
     @Shadow
     private int itemUseCooldown;
+
+    @Shadow
+    public int attackCooldown;
+
+
+    // eventos
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTickPre(CallbackInfo ci) {
@@ -49,9 +55,10 @@ public abstract class MinecraftClientMixin {
         if (event.isCancelled()) ci.cancel();
     }
 
-    @Inject(method = "isTelemetryEnabledByApi", at = @At("RETURN"), cancellable = true)
-    private void disableMicropenisTelemetryShi(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(false);
+    @Inject(method = "joinWorld", at = @At("HEAD"), cancellable = true)
+    private void onJoinWorld(ClientWorld world, CallbackInfo ci) {
+        JoinWorldEvent event = Sputnik.EVENT_BUS.post(new JoinWorldEvent(world));
+        if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
@@ -61,16 +68,21 @@ public abstract class MinecraftClientMixin {
         if (event.isCancelled()) ci.cancel();
     }
 
+
+    // telemetría
+
+    @Inject(method = "isTelemetryEnabledByApi", at = @At("RETURN"), cancellable = true)
+    private void disableMicropenisTelemetryShi(CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(false);
+    }
+
+
+    // precoz
+
     @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isItemEnabled(Lnet/minecraft/resource/featuretoggle/FeatureSet;)Z"))
     private void modifyItemUseCooldown(CallbackInfo ci, @Local ItemStack stack) {
         FastUse fastUse = ModuleManager.INSTANCE.getModuleByClass(FastUse.class);
         if (!fastUse.isEnabled()) return;
         itemUseCooldown = fastUse.getCooldown(stack);
-    }
-
-    @Inject(method = "joinWorld", at = @At("HEAD"), cancellable = true)
-    private void onJoinWorld(ClientWorld world, CallbackInfo ci) {
-        JoinWorldEvent event = Sputnik.EVENT_BUS.post(new JoinWorldEvent(world));
-        if (event.isCancelled()) ci.cancel();
     }
 }

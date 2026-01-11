@@ -105,6 +105,16 @@ public class ListSetting<T> extends Setting {
         return options;
     }
 
+    public List<T> getEnabledOptions() {
+        List<T> enabledOptions = new ArrayList<>();
+        for (T option : options) {
+            if (isEnabled(option)) {
+                enabledOptions.add(option);
+            }
+        }
+        return enabledOptions;
+    }
+
     public Map<T, String> getDisplayNames() {
         return displayNames;
     }

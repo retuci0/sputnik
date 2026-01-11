@@ -36,6 +36,7 @@ public class HudRenderer {
         addElement(new CustomTextElement(), positions, visibilities);
         addElement(new TimeElement(), positions, visibilities);
         addElement(new PingElement(), positions, visibilities);
+        addElement(new RotationElement(), positions, visibilities);
 
         addElement(new DynoElement(), positions, visibilities);
         addElement(new EchestElement(), positions, visibilities);

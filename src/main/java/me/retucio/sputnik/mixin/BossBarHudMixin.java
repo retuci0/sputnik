@@ -15,7 +15,8 @@ import java.util.Iterator;
 
 import static me.retucio.sputnik.Sputnik.EVENT_BUS;
 
-@Mixin(BossBarHud.class)
+
+@Mixin(value = BossBarHud.class)
 public abstract class BossBarHudMixin {
 
     @ModifyExpressionValue(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/Collection;iterator()Ljava/util/Iterator;"))
@@ -30,7 +31,8 @@ public abstract class BossBarHudMixin {
         return event.getName();
     }
 
-    @ModifyConstant(method = "render", constant = @Constant(intValue = 9, ordinal = 1))
+    // require = 0 para meteor
+    @ModifyConstant(method = "render", constant = @Constant(intValue = 9, ordinal = 1), require = 0)
     public int modifySpacingConstant(int constant) {
         RenderBossbarEvent.BossSpacing event = EVENT_BUS.post(new RenderBossbarEvent.BossSpacing(constant));
         return event.getSpacing();

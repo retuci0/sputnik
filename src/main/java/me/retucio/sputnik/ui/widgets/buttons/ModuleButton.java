@@ -43,7 +43,7 @@ public class ModuleButton extends Button {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
-        if (isHovered((int) mouseX, (int) mouseY) && ClickGUI.INSTANCE.trySelect(this)) {
+        if (isHovered(mouseX, mouseY) && ClickGUI.INSTANCE.trySelect(this)) {
             if (button == 0) {  // clic izquierdo para activar / desactivar el módulo
                 module.toggle();
             } else if (button == 1) {  // clic derecho para el marco de ajustes (también lo cierra si está abierto)
@@ -55,12 +55,6 @@ public class ModuleButton extends Button {
             }
         }
     }
-
-    @Override
-    public void mouseDragged(int mouseX, int mouseY) {}
-
-    @Override
-    public void onKey(int key, int action) {}
 
     // verifica si el puntero del ratón se encuentra sobre el botón del módulo
     @Override
